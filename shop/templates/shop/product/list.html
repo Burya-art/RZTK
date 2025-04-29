@@ -1,0 +1,22 @@
+{% extends "shop/base.html" %}
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h2>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4">
+        <div class="product-card">
+            <a href="{% url 'shop:product_detail' product.category.slug product.slug %}">
+                <img src="https://via.placeholder.com/300x200" alt="{{ product.name }}">
+                <h5 class="mt-2">{{ product.name }}</h5>
+            </a>
+            <p class="text-muted">{{ product.price }} грн</p>
+        </div>
+    </div>
+    {% empty %}
+    <p>No products available in this category.</p>
+    {% endfor %}
+</div>
+{% endblock %}

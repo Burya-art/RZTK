@@ -1,0 +1,22 @@
+body {
+    background-color: #f5f5f5;
+}
+.sidebar {
+    background-color: #fff;
+    padding: 15px;
+    border-right: 1px solid #ddd;
+}
+.content {
+    padding: 20px;
+}
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
