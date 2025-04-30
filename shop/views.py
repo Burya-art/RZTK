@@ -1,5 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Brand, Product
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from .forms import UserRegisterForm
 
 
 def product_list(request, category_slug=None):
@@ -8,6 +13,13 @@ def product_list(request, category_slug=None):
     categories = Category.objects.all()
     brands = Brand.objects.all()
     products = Product.objects.filter(available=True)
+
+    # Получаем поисковый запрос
+    search_query = request.GET.get('q')
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) | Q(description__icontains=search_query)
+        )
 
     # Фильтрация по категории через URL
     if category_slug:
@@ -31,7 +43,8 @@ def product_list(request, category_slug=None):
         'categories': categories,
         'brand': brand,
         'brands': brands,
-        'products': products
+        'products': products,
+        'search_query': search_query
     })
 
 
@@ -43,3 +56,39 @@ def product_detail(request, category_slug, product_slug):
         'category': category,
         'product': product
     })
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful!')
+            return redirect('shop:profile')
+        else:
+            messages.error(request, 'Error during registration. Please check the form.')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'shop/account/register.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    return render(request, 'shop/account/profile.html', {'user': request.user})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
