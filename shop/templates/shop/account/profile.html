@@ -8,5 +8,5 @@
     <h2>Welcome, {{ user.username }}!</h2>
     <p><strong>Email:</strong> {{ user.email }}</p>
     <p><a href="{% url 'shop:product_list' %}" class="btn btn-primary">Back to Shop</a></p>
-    <p><a href="{% url 'shop:logout' %}" class="btn btn-danger">Logout</a></p>
+    <p><a href="{% url 'account:logout' %}" class="btn btn-danger">Logout</a></p>
 {% endblock %}
