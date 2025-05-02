@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Brand(models.Model):
@@ -8,9 +9,17 @@ class Brand(models.Model):
     class Meta:
         verbose_name = 'brand'
         verbose_name_plural = 'brands'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['slug']),
+        ]
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):  # 777
+        return reverse('shop:product_list', kwargs={'brand': self.slug})
 
 
 class Category(models.Model):
@@ -20,9 +29,17 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'category'
         verbose_name_plural = 'categories'
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['slug']),
+        ]
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_category', args=[self.slug])
 
 
 class Product(models.Model):
@@ -35,9 +52,29 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True, null=True)
 
     class Meta:
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['id', 'slug']),
+            models.Index(fields=['name']),
+            models.Index(fields=['-created']),
+        ]
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:product_detail', args=[self.category.slug, self.slug])
+
+
+
+
+
+
+
+
+
+
+

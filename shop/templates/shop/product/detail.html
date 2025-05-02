@@ -1,10 +1,15 @@
 {% extends "shop/base.html" %}
+{% load static %}
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-6">
-        <img src="https://via.placeholder.com/500x350" alt="{{ product.name }}" class="img-fluid">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto;">
+        {% else %}
+            <img src="{% static 'img/Placeholder-1.png' %}" alt="No Image" class="product-image">
+        {% endif %}
     </div>
     <div class="col-md-6">
         <h2>{{ product.name }}</h2>

@@ -17,12 +17,15 @@ body {
     text-align: center;
 }
 .product-card img {
-    max-width: 100%;
-    height: auto;
+    max-width: 100%;  /* Ограничивает ширину до 100% контейнера */
+    height: auto;     /* Сохраняет пропорции */
+    max-height: 200px; /* Максимальная высота 200 пикселей */
+    display: block;   /* Убирает лишние отступы */
+    margin: 0 auto;   /* Центрирует изображение */
 }
 
 .navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Тень для панели поиска, как на Rozetka */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .form-control:focus {
     border-color: #007bff;  /* Цвет рамки при фокусе */
