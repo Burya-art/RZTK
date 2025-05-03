@@ -17,17 +17,68 @@ body {
     text-align: center;
 }
 .product-card img {
-    max-width: 100%;  /* Ограничивает ширину до 100% контейнера */
-    height: auto;     /* Сохраняет пропорции */
-    max-height: 200px; /* Максимальная высота 200 пикселей */
-    display: block;   /* Убирает лишние отступы */
-    margin: 0 auto;   /* Центрирует изображение */
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
 }
 
-.navbar {
+.navbar.custom-navbar {
+    background-color: #221f1f; /* Тёмный цвет для верхнего меню */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.form-control:focus {
-    border-color: #007bff;  /* Цвет рамки при фокусе */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);  /* Эффект свечения */
+.navbar.custom-navbar .navbar-brand .logo {
+    width: 170px;
+    height: 37px;
+    object-fit: contain;
+    background-color: #221f1f; /* Белый фон для логотипа, чтобы он был виден */
+    padding: 5px; /* Небольшой отступ для аккуратности */
+}
+.navbar.custom-navbar .form-control {
+    background-color: #fff;
+    color: #000;
+}
+.navbar.custom-navbar .form-control:focus {
+    border-color: #21a046;
+    box-shadow: 0 0 5px rgba(33, 160, 70, 0.3);
+}
+.navbar.custom-navbar .btn.search-btn {
+    background-color: #73b33d; /* Зелёный фон для кнопки Search */
+    color: #fff; /* Белый текст */
+    border: none;
+}
+.navbar.custom-navbar .btn.search-btn:hover {
+    background-color: #69a138; /* Чуть темнее при наведении */
+    color: #fff;
+}
+.navbar.custom-navbar .btn-outline-light {
+    border-color: #fff;
+    color: #fff;
+}
+.navbar.custom-navbar .btn-outline-light:hover {
+    background-color: #fff;
+    color: #221f1f;
+}
+.navbar.custom-navbar .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+.navbar.custom-navbar .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* Стили для ссылок в боковой панели */
+.sidebar a {
+    color: #221f1f; /* Изменяем цвет ссылок на тёмный */
+    text-decoration: none; /* Убираем подчёркивание */
+}
+.sidebar a:hover {
+    color: #21a046; /* Зелёный цвет при наведении */
+    text-decoration: underline; /* Подчёркивание при наведении */
+}
+.sidebar a.fw-bold {
+    color: #21a046; /* Цвет для активных ссылок */
+    font-weight: bold; /* Оставляем жирный шрифт для активных */
 }

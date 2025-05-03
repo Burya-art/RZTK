@@ -9,22 +9,27 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light mb-3">
+    <nav class="navbar custom-navbar mb-3">
         <div class="container-fluid">
+            <!-- Логотип с ссылкой на главную страницу -->
+            <a class="navbar-brand" href="{% url 'shop:product_list' %}">
+                <img src="{% static 'img/logo3.png' %}" alt="RZTK Logo" class="logo">
+            </a>
+            <!-- Поиск -->
             <form class="d-flex w-50 mx-auto" method="GET" action="{% url 'shop:product_list' %}">
                 <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
+                <button class="btn search-btn" type="submit">Search</button>
             </form>
             <div class="ms-auto">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'account:profile' %}" class="btn btn-outline-primary me-2">Profile</a>
+                    <a href="{% url 'account:profile' %}" class="btn btn-outline-light me-2">Profile</a>
                     <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-danger">Logout</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'account:login' %}" class="btn btn-outline-primary me-2">Login</a>
-                    <a href="{% url 'account:register' %}" class="btn btn-outline-primary">Register</a>
+                    <a href="{% url 'account:login' %}" class="btn btn-outline-light me-2">Login</a>
+                    <a href="{% url 'account:register' %}" class="btn btn-outline-light">Register</a>
                 {% endif %}
             </div>
         </div>
