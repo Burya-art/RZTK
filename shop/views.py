@@ -1,10 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Brand, Product
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-from .forms import UserRegisterForm
 
 
 def product_list(request, category_slug=None):
@@ -58,23 +54,3 @@ def product_detail(request, category_slug, product_slug):
             'category': category,
             'product': product
         })
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Registration successful!')
-            return redirect('shop:profile')
-        else:
-            messages.error(request, 'Error during registration. Please check the form.')
-    else:
-        form = UserRegisterForm()
-    return render(request, 'shop/account/register.html', {'form': form})
-
-
-@login_required
-def profile(request):
-    return render(request, 'shop/account/profile.html', {'user': request.user})

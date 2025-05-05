@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from ..views import register, profile
+from shop.account.views import register, profile
 
 app_name = 'account'
 
@@ -10,3 +10,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='shop:product_list'), name='logout'),
     path('profile/', profile, name='profile'),
 ]
+
+

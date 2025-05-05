@@ -10,6 +10,7 @@ class Brand(models.Model):
         verbose_name = 'brand'
         verbose_name_plural = 'brands'
         ordering = ['name']
+        db_table = 'brands'
 
     def __str__(self):
         return self.name
@@ -26,6 +27,7 @@ class Category(models.Model):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
         ordering = ['name']
+        db_table = 'categories'
 
     def __str__(self):
         return self.name
@@ -51,6 +53,7 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['name']
+        db_table = 'products'
         # indexes = [
         #     models.Index(fields=['-created']),
         # ]
