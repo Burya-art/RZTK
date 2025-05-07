@@ -17,6 +17,14 @@
         <p>{{ product.description }}</p>
         {% if product.available %}
             <span class="badge bg-success">В наличии</span>
+            {% if user.is_authenticated %}
+                <form action="{% url 'shop:add_to_basket' product.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mt-3">Добавить в корзину</button>
+                </form>
+            {% else %}
+                <p><a href="{% url 'account:login' %}">Войдите</a>, чтобы добавить товар в корзину.</p>
+            {% endif %}
         {% else %}
             <span class="badge bg-danger">Нет в наличии</span>
         {% endif %}

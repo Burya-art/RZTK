@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Brand(models.Model):
@@ -52,11 +53,9 @@ class Product(models.Model):
                               blank=True, null=True)
 
     class Meta:
-        ordering = ['name']
+        # ordering = ['name']
+        ordering = ['created']
         db_table = 'products'
-        # indexes = [
-        #     models.Index(fields=['-created']),
-        # ]
 
     def __str__(self):
         return self.name
@@ -66,12 +65,33 @@ class Product(models.Model):
                        args=[self.category.slug, self.slug])
 
 
+class Basket(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='baskets')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'baskets'
+        verbose_name = 'basket'
+        verbose_name_plural = 'baskets'
+
+    def __str__(self):
+        return f'Basket for {self.user.username}'
 
 
+class BasketItem(models.Model):
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='basket_items')
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'basket_items'
+        verbose_name = 'basket item'
+        verbose_name_plural = 'basket items'
 
+    def __str__(self):
+        return f'{self.quantity} x {self.product.name}'
 
-
-
-
-
+    def get_total_price(self):
+        return self.quantity * self.product.price

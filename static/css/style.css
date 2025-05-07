@@ -82,3 +82,23 @@ body {
     color: #21a046; /* Цвет для активных ссылок! */
     font-weight: bold; /* Оставляем жирный шрифт для активных */
 }
+
+/* Стили для кнопки-бургера */
+.navbar.custom-navbar .navbar-toggler {
+    border: 2px solid #fff; /* Белая рамка */
+    background-color: #221f1f; /* Тёмный фон, как у navbar */
+    padding: 8px; /* Уютный отступ */
+    border-radius: 5px; /* Скруглённые углы */
+    transition: all 0.3s ease; /* Плавные переходы */
+}
+
+.navbar.custom-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); /* Белая иконка */
+}
+
+.navbar.custom-navbar .navbar-toggler:hover,
+.navbar.custom-navbar .navbar-toggler:focus {
+    border-color: #21a046; /* Зелёная рамка при наведении/фокусе */
+    background-color: #2a2a2a; /* Чуть светлее фон */
+    box-shadow: 0 0 5px rgba(33, 160, 70, 0.5); /* Зелёное свечение */
+}

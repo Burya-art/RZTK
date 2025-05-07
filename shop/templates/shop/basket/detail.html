@@ -1,0 +1,35 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Кошик{% endblock %}
+
+{% block content %}
+<h2>Ваш кошик</h2>
+{% if basket.items.all %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Загальна вартість</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in basket.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.price }} грн</td>
+                    <td>{{ item.get_total_price }} грн</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p><strong>Разом:</strong> {{ total_price }} грн</p>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Продовжити покупки</a>
+{% else %}
+    <p>Ваш кошик порожній.</p>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Повернутися до покупок</a>
+{% endif %}
+{% endblock %}

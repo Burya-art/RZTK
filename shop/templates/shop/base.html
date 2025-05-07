@@ -9,40 +9,58 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar custom-navbar mb-3">
+    <nav class="navbar custom-navbar navbar-expand-md mb-3">
         <div class="container-fluid">
-            <!-- Логотип с ссылкой на главную страницу -->
+            <!-- Логотип з посиланням на головну сторінку -->
             <a class="navbar-brand" href="{% url 'shop:product_list' %}">
                 <img src="{% static 'img/logo3.png' %}" alt="RZTK Logo" class="logo">
             </a>
-            <!-- Поиск -->
-            <form class="d-flex w-50 mx-auto" method="GET" action="{% url 'shop:product_list' %}">
-                <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
-                <button class="btn search-btn" type="submit">Search</button>
-            </form>
-            <div class="ms-auto">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'account:profile' %}" class="btn btn-outline-light me-2">Profile</a>
-                    <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger">Logout</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'account:login' %}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{% url 'account:register' %}" class="btn btn-outline-light">Register</a>
-                {% endif %}
+            <!-- Кнопка для мобільної версії -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Коллапс-меню -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Пошук -->
+                <form class="d-flex w-50 mx-auto my-2 my-lg-0" method="GET" action="{% url 'shop:product_list' %}">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
+                    <button class="btn search-btn" type="submit">Search</button>
+                </form>
+                <div class="ms-auto">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'shop:basket_detail' %}" class="btn btn-outline-light me-2">Кошик</a>
+                        <a href="{% url 'account:profile' %}" class="btn btn-outline-light me-2">Профіль</a>
+                        <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger">Вийти</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'account:login' %}" class="btn btn-outline-light me-2">Увійти</a>
+                        <a href="{% url 'account:register' %}" class="btn btn-outline-light">Регістрація</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container-fluid">
+        {% if messages %}
+            <div class="row">
+                <div class="col-md-12">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-md-3 sidebar">
-                <h3>Filters</h3>
-                <h5>Categories</h5>
+                <h3>Фільтри</h3>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="{% url 'shop:product_list' %}" {% if not category %}class="fw-bold"{% endif %}>All</a>
+                        <a href="{% url 'shop:product_list' %}" {% if not category %}class="fw-bold"{% endif %}>Категорії</a>
                     </li>
                     {% for cat in categories %}
                         <li>
@@ -52,10 +70,9 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <h5>Brands</h5>
                 <ul class="list-unstyled">
                     <li>
-                        <a href="{% url 'shop:product_list' %}" {% if not brand %}class="fw-bold"{% endif %}>All Brands</a>
+                        <a href="{% url 'shop:product_list' %}" {% if not brand %}class="fw-bold"{% endif %}>Всі бренди</a>
                     </li>
                     {% for br in brands %}
                         <li>
