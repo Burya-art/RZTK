@@ -145,3 +145,11 @@ body {
         font-size: 0.875rem;
     }
 }
+
+/* Стилі для форм в корзині */
+.update-quantity-form, .remove-item-form {
+    display: inline-block;
+    margin: 0;
+}
+.update-quantity-form input, .update-quantity-form button {  /* Стилі для поля і кнопки */
+    vertical-align: middle;

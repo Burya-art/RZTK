@@ -3,6 +3,7 @@ from .models import Category, Brand, Product, Basket, BasketItem
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .forms import BasketItemForm
 
 
 def product_list(request, category_slug=None):
@@ -81,3 +82,26 @@ def basket_detail(request):
     total_price = sum(item.get_total_price() for item in basket.items.all())
     return render(request, 'shop/basket/detail.html',
                   {'basket': basket, 'total_price': total_price})
+
+
+@login_required
+def update_basket_item(request, item_id):
+    basket_item = get_object_or_404(BasketItem, id=item_id, basket__user=request.user)
+    if request.method == 'POST':
+        form = BasketItemForm(request.POST, instance=basket_item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Кількість товару оновлено!')
+        else:
+            messages.error(request, 'Помилка при оновленні кількості.')
+    return redirect('shop:basket_detail')
+
+
+@login_required
+def remove_from_basket(request, item_id):
+    basket_item = get_object_or_404(BasketItem, id=item_id,
+                                    basket__user=request.user)
+    if request.method == 'POST':
+        basket_item.delete()
+        messages.success(request, 'Товар видалено з кошика!')
+    return redirect('shop:basket_detail')

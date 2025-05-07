@@ -13,15 +13,28 @@
                 <th>Кількість</th>
                 <th>Ціна за одиницю</th>
                 <th>Загальна вартість</th>
+                <th>Дії</th>
             </tr>
         </thead>
         <tbody>
             {% for item in basket.items.all %}
                 <tr>
                     <td>{{ item.product.name }}</td>
-                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <form action="{% url 'shop:update_basket_item' item.id %}" method="post" class="update-quantity-form">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm d-inline" style="width: 80px;">
+                            <button type="submit" class="btn btn-sm btn-primary ms-2">Оновити</button>
+                        </form>
+                    </td>
                     <td>{{ item.product.price }} грн</td>
                     <td>{{ item.get_total_price }} грн</td>
+                    <td>
+                        <form action="{% url 'shop:remove_from_basket' item.id %}" method="post" class="remove-item-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
