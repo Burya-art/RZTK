@@ -9,35 +9,40 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar custom-navbar navbar-expand-md mb-3">
+    <nav class="navbar custom-navbar navbar-expand-lg mb-3">
         <div class="container-fluid">
-            <!-- Логотип з посиланням на головну сторінку -->
+            <!-- Логотип с ссылкой на главную страницу -->
             <a class="navbar-brand" href="{% url 'shop:product_list' %}">
                 <img src="{% static 'img/logo3.png' %}" alt="RZTK Logo" class="logo">
             </a>
-            <!-- Кнопка для мобільної версії -->
+            <!-- Кнопка для мобильной версии -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- Коллапс-меню -->
+            <!-- Контейнер для меню -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Пошук -->
-                <form class="d-flex w-50 mx-auto my-2 my-lg-0" method="GET" action="{% url 'shop:product_list' %}">
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
-                    <button class="btn search-btn" type="submit">Search</button>
-                </form>
-                <div class="ms-auto">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'shop:basket_detail' %}" class="btn btn-outline-light me-2">Кошик</a>
-                        <a href="{% url 'account:profile' %}" class="btn btn-outline-light me-2">Профіль</a>
-                        <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger">Вийти</button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'account:login' %}" class="btn btn-outline-light me-2">Увійти</a>
-                        <a href="{% url 'account:register' %}" class="btn btn-outline-light">Регістрація</a>
-                    {% endif %}
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    <!-- Пустое пространство для выравнивания -->
+                    <div class="d-none d-lg-block" style="width: 200px;"></div>
+                    <!-- Поиск по центру -->
+                    <form class="d-flex w-50 mx-auto my-2 my-lg-0" method="GET" action="{% url 'shop:product_list' %}">
+                        <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="Пошук..." aria-label="Search">
+                        <button class="btn btn-sm search-btn" type="submit">Пошук</button>
+                    </form>
+                    <!-- Кнопки -->
+                    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-2 mt-md-0">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'shop:basket_detail' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Кошик</a>
+                            <a href="{% url 'account:profile' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Профіль</a>
+                            <form method="POST" action="{% url 'account:logout' %}" class="mb-2 mb-md-0">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Вийти</button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'account:login' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Увійти</a>
+                            <a href="{% url 'account:register' %}" class="btn btn-outline-light btn-sm">Регістрація</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

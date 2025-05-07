@@ -25,15 +25,15 @@ body {
 }
 
 .navbar.custom-navbar {
-    background-color: #221f1f; /* Тёмный цвет для верхнего меню */
+    background-color: #221f1f;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .navbar.custom-navbar .navbar-brand .logo {
     width: 170px;
     height: 37px;
     object-fit: contain;
-    background-color: #221f1f; /* Белый фон для логотипа, чтобы он был виден */
-    padding: 5px; /* Небольшой отступ для аккуратности */
+    background-color: #221f1f;
+    padding: 5px;
 }
 .navbar.custom-navbar .form-control {
     background-color: #fff;
@@ -44,12 +44,12 @@ body {
     box-shadow: 0 0 5px rgba(33, 160, 70, 0.3);
 }
 .navbar.custom-navbar .btn.search-btn {
-    background-color: #73b33d; /* Зелёный фон для кнопки Search */
-    color: #fff; /* Белый текст */
+    background-color: #73b33d;
+    color: #fff;
     border: none;
 }
 .navbar.custom-navbar .btn.search-btn:hover {
-    background-color: #69a138; /* Чуть темнее при наведении */
+    background-color: #69a138;
     color: #fff;
 }
 .navbar.custom-navbar .btn-outline-light {
@@ -71,34 +71,77 @@ body {
 
 /* Стили для ссылок в боковой панели */
 .sidebar a {
-    color: #221f1f; /* Изменяем цвет ссылок на тёмный */
-    text-decoration: none; /* Убираем подчёркивание */
+    color: #221f1f;
+    text-decoration: none;
 }
 .sidebar a:hover {
-    color: #21a046; /* Зелёный цвет при наведении */
-    text-decoration: underline; /* Подчёркивание при наведении */
+    color: #21a046;
+    text-decoration: underline;
 }
 .sidebar a.fw-bold {
-    color: #21a046; /* Цвет для активных ссылок! */
-    font-weight: bold; /* Оставляем жирный шрифт для активных */
+    color: #21a046;
+    font-weight: bold;
 }
 
-/* Стили для кнопки-бургера */
-.navbar.custom-navbar .navbar-toggler {
-    border: 2px solid #fff; /* Белая рамка */
-    background-color: #221f1f; /* Тёмный фон, как у navbar */
-    padding: 8px; /* Уютный отступ */
-    border-radius: 5px; /* Скруглённые углы */
-    transition: all 0.3s ease; /* Плавные переходы */
+/* Кастомизация кнопки-бургера */
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    background-color: #73b33d;
+    color: #fff;
+    border-radius: 0.25rem;
+}
+.navbar-toggler:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(115, 179, 61, 0.5);
 }
 
-.navbar.custom-navbar .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); /* Белая иконка */
+/* Стили для десктопной версии */
+@media (min-width: 992px) {
+    .navbar-collapse {
+        background-color: transparent;
+        padding: 0;
+    }
+    .navbar-collapse .btn {
+        margin-bottom: 0;
+    }
 }
 
-.navbar.custom-navbar .navbar-toggler:hover,
-.navbar.custom-navbar .navbar-toggler:focus {
-    border-color: #21a046; /* Зелёная рамка при наведении/фокусе */
-    background-color: #2a2a2a; /* Чуть светлее фон */
-    box-shadow: 0 0 5px rgba(33, 160, 70, 0.5); /* Зелёное свечение */
+/* Стили для мобильной версии */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background-color: #221f1f;
+        padding: 1rem;
+        width: 100%;
+    }
+    .navbar-collapse .d-flex.w-100 {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .navbar-collapse .d-flex.w-50 {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .navbar-collapse .d-flex.flex-column {
+        align-items: stretch;
+        width: 100%;
+    }
+    .navbar-collapse .btn {
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .navbar-collapse form {
+        width: 100%;
+    }
+    .navbar-collapse input.form-control {
+        width: 100%;
+        font-size: 0.875rem;
+    }
+    .navbar-collapse .btn.search-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 }
