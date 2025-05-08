@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Brand, Product, Basket, BasketItem
+from .models import Category, Brand, Product, Basket, BasketItem, Order, OrderItem
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import BasketItemForm
+from .forms import BasketItemForm, OrderForm
 
 
 def product_list(request, category_slug=None):
@@ -80,8 +80,9 @@ def add_to_basket(request, product_id):
 def basket_detail(request):
     basket, created = Basket.objects.get_or_create(user=request.user)
     total_price = sum(item.get_total_price() for item in basket.items.all())
+    order_form = OrderForm()
     return render(request, 'shop/basket/detail.html',
-                  {'basket': basket, 'total_price': total_price})
+                  {'basket': basket, 'total_price': total_price, 'order_form': order_form})
 
 
 @login_required
@@ -105,3 +106,76 @@ def remove_from_basket(request, item_id):
         basket_item.delete()
         messages.success(request, 'Товар видалено з кошика!')
     return redirect('shop:basket_detail')
+
+
+@login_required
+def create_order(request):
+    basket = get_object_or_404(Basket, user=request.user)
+    if not basket.items.exists():
+        messages.error(
+            request,
+            'Ваш кошик порожній. Додайте товари перед оформленням замовлення.')
+        return redirect('shop:basket_detail')
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            # Створюємо замовлення
+            order = form.save(commit=False)
+            order.user = request.user
+            order.save()
+
+            # Переносимо товари з кошика в замовлення
+            for item in basket.items.all():
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    price=item.product.price,  # Фіксуємо ціну на момент замовлення
+                    quantity=item.quantity
+                )
+
+            # Очищаємо кошик після створення замовлення
+            basket.items.all().delete()
+            messages.success(request, f'Замовлення #{order.id} успішно створено!')
+            return redirect('shop:product_list')
+        return redirect('shop:basket_detail')
+
+
+@login_required
+def clear_basket(request): # очищення кошика
+    basket = get_object_or_404(Basket, user=request.user)
+    if request.method == 'POST':
+        basket.items.all().delete()
+        messages.success(request, 'Кошик успішно очищено!')
+    return redirect('shop:basket_detail')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

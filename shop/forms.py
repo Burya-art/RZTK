@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import BasketItem
+from .models import BasketItem, Order
 
 
 class UserRegisterForm(UserCreationForm):
@@ -17,5 +17,19 @@ class BasketItemForm(forms.ModelForm):
         model = BasketItem
         fields = ['quantity']
         widgets = {
-            'quantity': forms.NumberInput(attrs={'min': 1, 'class': 'form-control form-control-sm'}),
+            'quantity': forms.NumberInput(attrs={
+                'min': 1,
+                'class': 'form-control form-control-sm'
+            }),
+        }
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['address']
+        widgets = {
+            'address': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Введіть адресу доставки'
+            }),
         }

@@ -40,7 +40,21 @@
         </tbody>
     </table>
     <p><strong>Разом:</strong> {{ total_price }} грн</p>
-    <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Продовжити покупки</a>
+    <!-- Форма для оформлення замовлення -->
+    <h3>Оформити замовлення</h3>
+    <form action="{% url 'shop:create_order' %}" method="post">
+        {% csrf_token %}
+        {{ order_form.as_p }}
+        <button type="submit" class="btn btn-rztk">Оформити замовлення</button>
+    </form>
+
+    <div class="mt-3">  <!-- кнопки -->
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Продовжити покупки</a>
+        <form action="{% url 'shop:clear_basket' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Очистити кошик</button>
+        </form>
+    </div>
 {% else %}
     <p>Ваш кошик порожній.</p>
     <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Повернутися до покупок</a>

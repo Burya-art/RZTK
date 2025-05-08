@@ -44,12 +44,12 @@ body {
     box-shadow: 0 0 5px rgba(33, 160, 70, 0.3);
 }
 .navbar.custom-navbar .btn.search-btn {
-    background-color: #73b33d;
+    background-color: #21a046;
     color: #fff;
     border: none;
 }
 .navbar.custom-navbar .btn.search-btn:hover {
-    background-color: #69a138;
+    background-color: #22b54d;
     color: #fff;
 }
 .navbar.custom-navbar .btn-outline-light {
@@ -144,6 +144,19 @@ body {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
     }
+}
+
+/* Стилі для кнопок */
+.btn-rztk {
+    background-color: #21a046;
+    color: #fff;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-rztk:hover {
+    background-color: #25b850;
+    color: #fff;
 }
 
 /* Стилі для форм в корзині */

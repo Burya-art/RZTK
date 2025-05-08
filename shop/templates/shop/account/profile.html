@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Welcome, {{ user.username }}!</h2>
+    <h2>Ласкаво просимо, {{ user.username }}!</h2>
     <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><a href="{% url 'shop:product_list' %}" class="btn btn-primary">Back to Shop</a></p>
+    <p><a href="{% url 'shop:product_list' %}" class="btn btn-primary">До покупок</a></p>
     <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
     {% csrf_token %}
     <button type="submit" class="btn btn-outline-danger">Вийти</button>
