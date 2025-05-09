@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from shop.forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from shop.models import Order
 
 
 def register(request):
@@ -22,4 +23,9 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'shop/account/profile.html', {'user': request.user})
+    orders = Order.objects.filter(user=request.user).order_by(
+        '-created')  # Отримуємо замовлення користувача, сортуємо за датою (нові зверху)
+    return render(
+        request,
+        'shop/account/profile.html',
+        {'user': request.user, 'orders': orders})

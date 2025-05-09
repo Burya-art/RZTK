@@ -7,9 +7,43 @@
 {% block content %}
     <h2>Ласкаво просимо, {{ user.username }}!</h2>
     <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <h3>Ваші замовлення</h3>
+    {% if orders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Номер замовлення</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Загальна вартість</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.created|date:"d.m.Y H:i" }}</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>{{ order.get_total_price }} грн</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>У вас ще немає замовлень.</p>
+    {% endif %}
+
     <p><a href="{% url 'shop:product_list' %}" class="btn btn-primary">До покупок</a></p>
     <form method="POST" action="{% url 'account:logout' %}" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-danger">Вийти</button>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">Вийти</button>
     </form>
 {% endblock %}
+
+
+
+
+
+
+
