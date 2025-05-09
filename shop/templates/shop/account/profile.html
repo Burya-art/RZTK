@@ -22,7 +22,7 @@
             <tbody>
                 {% for order in orders %}
                     <tr>
-                        <td>{{ order.id }}</td>
+                        <td><a href="{% url 'shop:order_detail' order.id %}">{{ order.id }}</a></td>
                         <td>{{ order.created|date:"d.m.Y H:i" }}</td>
                         <td>{{ order.get_status_display }}</td>
                         <td>{{ order.get_total_price }} грн</td>

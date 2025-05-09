@@ -12,6 +12,7 @@ urlpatterns = [
          name='remove_from_basket'),  # видаляє товар із кошика
     path('create-order/', views.create_order, name='create_order'),  # маршрут для створення замовлення
     path('clear-basket/', views.clear_basket, name='clear_basket'),  # маршрут для очищення кошика
+    path('order/<int:order_id>/', views.order_detail, name='order_detail'),  # маршрут для деталей замовлення
     path('', views.product_list, name='product_list'),  # показує всі товари
     path('<slug:category_slug>/', views.product_list, name='product_list_by_category'),  # показує товари конкретної категорії
     path('<slug:category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),  # детальна сторінка товару

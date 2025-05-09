@@ -150,8 +150,14 @@ def clear_basket(request): # очищення кошика
     return redirect('shop:basket_detail')
 
 
-
-
+@login_required
+def order_detail(request, order_id): # представлення для деталей замовлення
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(
+        request,
+        'shop/order/detail.html',
+        {'order': order}
+    )
 
 
 

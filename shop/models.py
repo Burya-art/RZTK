@@ -8,8 +8,8 @@ class Brand(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
 
     class Meta:
-        verbose_name = 'brand'
-        verbose_name_plural = 'brands'
+        verbose_name = 'Бренд'
+        verbose_name_plural = 'Бренди'
         ordering = ['name']
         db_table = 'brands'
 
@@ -25,8 +25,8 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
 
     class Meta:
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
+        verbose_name = 'Категорія'
+        verbose_name_plural = 'Категорії'
         ordering = ['name']
         db_table = 'categories'
 
@@ -56,6 +56,8 @@ class Product(models.Model):
         # ordering = ['name']
         ordering = ['created']
         db_table = 'products'
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукти'
 
     def __str__(self):
         return self.name
@@ -72,8 +74,8 @@ class Basket(models.Model):
 
     class Meta:
         db_table = 'baskets'
-        verbose_name = 'basket'
-        verbose_name_plural = 'baskets'
+        verbose_name = 'Кошик'
+        verbose_name_plural = 'Кошики'
 
     def __str__(self):
         return f'Basket for {self.user.username}'
@@ -87,8 +89,8 @@ class BasketItem(models.Model):
 
     class Meta:
         db_table = 'basket_items'
-        verbose_name = 'basket item'
-        verbose_name_plural = 'basket items'
+        verbose_name = 'Товар в кошику'
+        verbose_name_plural = 'Товари в кошику'
 
     def __str__(self):
         return f'{self.quantity} x {self.product.name}'
@@ -110,8 +112,8 @@ class Order(models.Model):
 
     class Meta:
         db_table = 'orders'
-        verbose_name = 'order'
-        verbose_name_plural = 'orders'
+        verbose_name = 'Замовлення'
+        verbose_name_plural = 'Замовлення'
         ordering = ['-created']  # Сортуємо за датою створення (новіші перші)
 
     def __str__(self):
@@ -131,8 +133,8 @@ class OrderItem(models.Model):
 
     class Meta:
         db_table = 'order_items'
-        verbose_name = 'order item'
-        verbose_name_plural = 'order items'
+        verbose_name = 'Елемент замовлення'
+        verbose_name_plural = 'Елементи замовлення'
 
     def __str__(self):
         return f'{self.quantity} x {self.product.name} (Замовлення {self.order.id})'
