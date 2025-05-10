@@ -1,10 +1,31 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from .models import Category, Brand, Product, Basket, BasketItem, Order, OrderItem
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import BasketItemForm, OrderForm
+from django.views.decorators.csrf import csrf_exempt
+import environ
+from .services.nova_poshta import NovaPoshtaService
+import os
+import logging
 
+logger = logging.getLogger(__name__)
+
+# Дебаг: виводимо шлях до .env
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env_file_path = os.path.join(BASE_DIR, '.env')
+print(f"Шлях до .env: {env_file_path}")
+
+env = environ.Env()
+environ.Env.read_env(env_file_path)
+
+# Дебаг: виводимо значення NOVA_POSHTA_API_KEY
+api_key = env('NOVA_POSHTA_API_KEY')
+print(f"NOVA_POSHTA_API_KEY: {api_key}")
+
+nova_poshta_service = NovaPoshtaService(api_key)
 
 def product_list(request, category_slug=None):
     category = None
@@ -42,7 +63,6 @@ def product_list(request, category_slug=None):
             'search_query': search_query
         })
 
-
 def product_detail(request, category_slug, product_slug):
     category = get_object_or_404(Category, slug=category_slug)
     product = get_object_or_404(Product, category=category, slug=product_slug, available=True)
@@ -54,7 +74,6 @@ def product_detail(request, category_slug, product_slug):
             'category': category,
             'product': product
         })
-
 
 @login_required
 def add_to_basket(request, product_id):
@@ -75,7 +94,6 @@ def add_to_basket(request, product_id):
         return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug)
     return redirect('shop:product_list')
 
-
 @login_required
 def basket_detail(request):
     basket, created = Basket.objects.get_or_create(user=request.user)
@@ -83,7 +101,6 @@ def basket_detail(request):
     order_form = OrderForm()
     return render(request, 'shop/basket/detail.html',
                   {'basket': basket, 'total_price': total_price, 'order_form': order_form})
-
 
 @login_required
 def update_basket_item(request, item_id):
@@ -97,7 +114,6 @@ def update_basket_item(request, item_id):
             messages.error(request, 'Помилка при оновленні кількості.')
     return redirect('shop:basket_detail')
 
-
 @login_required
 def remove_from_basket(request, item_id):
     basket_item = get_object_or_404(BasketItem, id=item_id,
@@ -106,7 +122,6 @@ def remove_from_basket(request, item_id):
         basket_item.delete()
         messages.success(request, 'Товар видалено з кошика!')
     return redirect('shop:basket_detail')
-
 
 @login_required
 def create_order(request):
@@ -120,38 +135,40 @@ def create_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            # Створюємо замовлення
             order = form.save(commit=False)
             order.user = request.user
+            order.address = f"{form.cleaned_data['city']}, {form.cleaned_data['address']}"
+            order.address_ref = form.cleaned_data['address_ref']
             order.save()
 
-            # Переносимо товари з кошика в замовлення
             for item in basket.items.all():
                 OrderItem.objects.create(
                     order=order,
                     product=item.product,
-                    price=item.product.price,  # Фіксуємо ціну на момент замовлення
+                    price=item.product.price,
                     quantity=item.quantity
                 )
 
-            # Очищаємо кошик після створення замовлення
             basket.items.all().delete()
             messages.success(request, f'Замовлення #{order.id} успішно створено!')
             return redirect('shop:product_list')
-        return redirect('shop:basket_detail')
-
+        else:
+            # Выводим ошибки валидации формы
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Помилка в полі '{field}': {error}")
+            return redirect('shop:basket_detail')
 
 @login_required
-def clear_basket(request): # очищення кошика
+def clear_basket(request):
     basket = get_object_or_404(Basket, user=request.user)
     if request.method == 'POST':
         basket.items.all().delete()
         messages.success(request, 'Кошик успішно очищено!')
     return redirect('shop:basket_detail')
 
-
 @login_required
-def order_detail(request, order_id): # представлення для деталей замовлення
+def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(
         request,
@@ -159,29 +176,24 @@ def order_detail(request, order_id): # представлення для дет�
         {'order': order}
     )
 
+@login_required
+@csrf_exempt
+def get_nova_poshta_cities(request):
+    city = request.GET.get('city', '')
+    if not city:
+        return JsonResponse({'error': 'Місто обов’язкове'}, status=400)
 
+    cities = nova_poshta_service.get_cities(city)
+    logger.debug(f"Returned cities for {city}: {cities}")
+    return JsonResponse({'cities': cities})
 
+@login_required
+@csrf_exempt
+def get_nova_poshta_warehouses(request):
+    city = request.GET.get('city', '')
+    if not city:
+        return JsonResponse({'error': 'Місто обов’язкове'}, status=400)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    warehouses = nova_poshta_service.get_warehouses(city)
+    logger.debug(f"Returned warehouses for {city}: {warehouses}")
+    return JsonResponse({'warehouses': warehouses})
