@@ -27,6 +27,7 @@ print(f"NOVA_POSHTA_API_KEY: {api_key}")
 
 nova_poshta_service = NovaPoshtaService(api_key)
 
+
 def product_list(request, category_slug=None):
     category = None
     brand = None
@@ -63,6 +64,7 @@ def product_list(request, category_slug=None):
             'search_query': search_query
         })
 
+
 def product_detail(request, category_slug, product_slug):
     category = get_object_or_404(Category, slug=category_slug)
     product = get_object_or_404(Product, category=category, slug=product_slug, available=True)
@@ -74,6 +76,7 @@ def product_detail(request, category_slug, product_slug):
             'category': category,
             'product': product
         })
+
 
 @login_required
 def add_to_basket(request, product_id):
@@ -94,6 +97,7 @@ def add_to_basket(request, product_id):
         return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug)
     return redirect('shop:product_list')
 
+
 @login_required
 def basket_detail(request):
     basket, created = Basket.objects.get_or_create(user=request.user)
@@ -101,6 +105,7 @@ def basket_detail(request):
     order_form = OrderForm()
     return render(request, 'shop/basket/detail.html',
                   {'basket': basket, 'total_price': total_price, 'order_form': order_form})
+
 
 @login_required
 def update_basket_item(request, item_id):
@@ -114,6 +119,7 @@ def update_basket_item(request, item_id):
             messages.error(request, 'Помилка при оновленні кількості.')
     return redirect('shop:basket_detail')
 
+
 @login_required
 def remove_from_basket(request, item_id):
     basket_item = get_object_or_404(BasketItem, id=item_id,
@@ -122,6 +128,7 @@ def remove_from_basket(request, item_id):
         basket_item.delete()
         messages.success(request, 'Товар видалено з кошика!')
     return redirect('shop:basket_detail')
+
 
 @login_required
 def create_order(request):
@@ -159,6 +166,7 @@ def create_order(request):
                     messages.error(request, f"Помилка в полі '{field}': {error}")
             return redirect('shop:basket_detail')
 
+
 @login_required
 def clear_basket(request):
     basket = get_object_or_404(Basket, user=request.user)
@@ -166,6 +174,7 @@ def clear_basket(request):
         basket.items.all().delete()
         messages.success(request, 'Кошик успішно очищено!')
     return redirect('shop:basket_detail')
+
 
 @login_required
 def order_detail(request, order_id):
@@ -175,6 +184,7 @@ def order_detail(request, order_id):
         'shop/order/detail.html',
         {'order': order}
     )
+
 
 @login_required
 @csrf_exempt
@@ -186,6 +196,7 @@ def get_nova_poshta_cities(request):
     cities = nova_poshta_service.get_cities(city)
     logger.debug(f"Returned cities for {city}: {cities}")
     return JsonResponse({'cities': cities})
+
 
 @login_required
 @csrf_exempt

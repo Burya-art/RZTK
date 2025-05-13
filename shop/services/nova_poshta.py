@@ -4,6 +4,7 @@ from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
+
 class NovaPoshtaService:
     API_URL = "https://api.novaposhta.ua/v2.0/json/"
 
