@@ -6,26 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import BasketItemForm, OrderForm
 from django.views.decorators.csrf import csrf_exempt
-import environ
 from .services.nova_poshta import NovaPoshtaService
-import os
+from rztk_project.settings import NOVA_POSHTA_API_KEY
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Дебаг: виводимо шлях до .env
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env_file_path = os.path.join(BASE_DIR, '.env')
-print(f"Шлях до .env: {env_file_path}")
-
-env = environ.Env()
-environ.Env.read_env(env_file_path)
-
-# Дебаг: виводимо значення NOVA_POSHTA_API_KEY
-api_key = env('NOVA_POSHTA_API_KEY')
-print(f"NOVA_POSHTA_API_KEY: {api_key}")
-
-nova_poshta_service = NovaPoshtaService(api_key)
+# Инициализация NovaPoshtaService
+nova_poshta_service = NovaPoshtaService(NOVA_POSHTA_API_KEY)
+logger.debug(f"NOVA_POSHTA_API_KEY: {NOVA_POSHTA_API_KEY}")
 
 
 def product_list(request, category_slug=None):
@@ -122,8 +111,7 @@ def update_basket_item(request, item_id):
 
 @login_required
 def remove_from_basket(request, item_id):
-    basket_item = get_object_or_404(BasketItem, id=item_id,
-                                    basket__user=request.user)
+    basket_item = get_object_or_404(BasketItem, id=item_id, basket__user=request.user)
     if request.method == 'POST':
         basket_item.delete()
         messages.success(request, 'Товар видалено з кошика!')
@@ -160,7 +148,6 @@ def create_order(request):
             messages.success(request, f'Замовлення #{order.id} успішно створено!')
             return redirect('shop:product_list')
         else:
-            # Выводим ошибки валидации формы
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"Помилка в полі '{field}': {error}")

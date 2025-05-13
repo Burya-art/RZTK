@@ -1,21 +1,17 @@
+import environ
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Инициализация environ
+env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
+env.read_env(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Основные настройки
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-xxu(cqz#-ie*ng-omy2y)q+tx))$mwidx(b8jlub=bo!(l%qq7')
+DEBUG = env.bool('DEBUG', default=True)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xxu(cqz#-ie*ng-omy2y)q+tx))$mwidx(b8jlub=bo!(l%qq7'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-# Application definition
-
+# Приложения
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,8 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
+    'django_redis',
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -38,6 +36,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'rztk_project.urls'
 
+# Шаблоны
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -56,90 +55,79 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'rztk_project.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+# База данных
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rztk_db',
-        'USER': 'rztk_user',
-        'PASSWORD': '12345',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': env('DB_NAME', default='rztk_db'),
+        'USER': env('DB_USER', default='rztk_user'),
+        'PASSWORD': env('DB_PASSWORD', default='12345'),
+        'HOST': env('DB_HOST', default='localhost'),
+        'PORT': env('DB_PORT', default='5432'),
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# Валидация паролей
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
+# Интернационализация
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# Статические и медиа файлы
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static/']
-
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
+# Автоинкремент
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Перенаправление после входа/выхода
+# Перенаправления
 LOGIN_REDIRECT_URL = 'account:profile'
 LOGOUT_REDIRECT_URL = 'shop:product_list'
 LOGIN_URL = 'account:login'
 
-# Cache settings
+# Настройки Redis
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+REDIS_PORT = env('REDIS_PORT', default='6379')
+REDIS_DB = env('REDIS_DB', default='1')
+REDIS_PASSWORD = env('REDIS_PASSWORD', default=None)
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}' if REDIS_PASSWORD else f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'TIMEOUT': 3600,
     }
-}  # Додаємо налаштування для кешування
+}
 
-# Logging configuration
+# API Новая Почта
+NOVA_POSHTA_API_KEY = env('NOVA_POSHTA_API_KEY', default='')
+
+# Логирование
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'level': 'DEBUG',  # Встановлюємо рівень логування на DEBUG
+            'level': 'DEBUG',
         },
     },
     'loggers': {
-        '': {  # Кореневий логгер
+        '': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
