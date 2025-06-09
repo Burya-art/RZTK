@@ -50,7 +50,7 @@ def product_list(request, category_slug=None):
             'brand': brand,
             'brands': brands,
             'products': products,
-            'search_query': search_query
+            'search_query': search_query,
         })
 
 
@@ -63,7 +63,9 @@ def product_detail(request, category_slug, product_slug):
         'shop/product/detail.html',
         {
             'category': category,
-            'product': product
+            'product': product,
+            'categories': Category.objects.all(),
+            'brands': Brand.objects.all()
         })
 
 
@@ -83,7 +85,7 @@ def add_to_basket(request, product_id):
             basket_item.save()
 
         messages.success(request, 'Товар успішно додано до кошика!')
-        return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug)
+        return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug,)
     return redirect('shop:product_list')
 
 
@@ -93,7 +95,13 @@ def basket_detail(request):
     total_price = sum(item.get_total_price() for item in basket.items.all())
     order_form = OrderForm()
     return render(request, 'shop/basket/detail.html',
-                  {'basket': basket, 'total_price': total_price, 'order_form': order_form})
+                  {
+                      'basket': basket,
+                      'total_price': total_price,
+                      'order_form': order_form,
+                      'categories': Category.objects.all(),
+                      'brands': Brand.objects.all()
+                  })
 
 
 @login_required
@@ -118,40 +126,38 @@ def remove_from_basket(request, item_id):
     return redirect('shop:basket_detail')
 
 
-@login_required
-def create_order(request):
-    basket = get_object_or_404(Basket, user=request.user)
-    if not basket.items.exists():
-        messages.error(
-            request,
-            'Ваш кошик порожній. Додайте товари перед оформленням замовлення.')
-        return redirect('shop:basket_detail')
+@login_required  # Требует, чтобы пользователь был авторизован
+def create_order(request):  # Функция для создания заказа
+    basket = get_object_or_404(Basket, user=request.user)  # Получает корзину пользователя или 404, если нет
+    if not basket.items.exists():  # Проверяет, есть ли товары в корзине
+        messages.error(request, 'Ваш кошик порожній. Додайте товари перед оформленням замовлення.')  # Сообщение об ошибке, если корзина пуста
+        return redirect('shop:basket_detail')  # Перенаправляет на страницу корзины
 
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.address = f"{form.cleaned_data['city']}, {form.cleaned_data['address']}"
-            order.address_ref = form.cleaned_data['address_ref']
-            order.save()
+    if request.method == 'POST':  # Проверяет, что запрос — POST (форма отправлена)
+        form = OrderForm(request.POST)  # Создает форму с данными из запроса
+        if form.is_valid():  # Проверяет, валидна ли форма
+            order = form.save(commit=False)  # Создает заказ, но не сохраняет в БД
+            order.user = request.user  # Привязывает заказ к текущему пользователю
+            order.address = f"{form.cleaned_data['city']}, {form.cleaned_data['address']}"  # Формирует адрес из города и отделения
+            order.address_ref = form.cleaned_data['address_ref']  # Сохраняет ref отделения Новой Почты
+            order.save()  # Сохраняет заказ в БД
 
-            for item in basket.items.all():
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    price=item.product.price,
-                    quantity=item.quantity
+            for item in basket.items.all():  # Перебирает все товары в корзине
+                OrderItem.objects.create(  # Создает элемент заказа для каждого товара
+                    order=order,  # Привязывает к заказу
+                    product=item.product,  # Указывает продукт
+                    price=item.product.price,  # Фиксирует цену
+                    quantity=item.quantity  # Указывает количество
                 )
 
-            basket.items.all().delete()
-            messages.success(request, f'Замовлення #{order.id} успішно створено!')
-            return redirect('shop:product_list')
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"Помилка в полі '{field}': {error}")
-            return redirect('shop:basket_detail')
+            basket.items.all().delete()  # Удаляет все товары из корзины
+            messages.success(request, f'Замовлення #{order.id} успішно створено!')  # Сообщение об успешном создании
+            return redirect('shop:product_list')  # Перенаправляет на список товаров
+        else:  # Если форма невалидна
+            for field, errors in form.errors.items():  # Перебирает ошибки формы
+                for error in errors:  # Для каждой ошибки
+                    messages.error(request, f"Помилка в полі '{field}': {error}")  # Выводит сообщение об ошибке
+            return redirect('shop:basket_detail')  # Перенаправляет на страницу корзины
 
 
 @login_required
@@ -169,7 +175,11 @@ def order_detail(request, order_id):
     return render(
         request,
         'shop/order/detail.html',
-        {'order': order}
+        {
+            'order': order,
+            'categories': Category.objects.all(),
+            'brands': Brand.objects.all()
+        }
     )
 
 

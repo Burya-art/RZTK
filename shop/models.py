@@ -104,6 +104,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     address = models.CharField(max_length=250)
+    address_ref = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=[
         ('pending', 'Очікує обробки'),
         ('shipped', 'Відправлено'),

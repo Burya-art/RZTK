@@ -45,7 +45,8 @@ class NovaPoshtaService:
                 logger.debug(f"Знайдено {len(cities)} міст")
                 return cities
             else:
-                logger.error(f"Помилка API Нової Пошти (getCities): {data.get('errors')}")
+                logger.error(f"Помилка API Нової"
+                             f" Пошти (getCities): {data.get('errors')}")
                 return []
         except requests.RequestException as e:
             logger.error(f"Помилка запиту до API Нової Пошти (getCities): {str(e)}")

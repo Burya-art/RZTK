@@ -59,7 +59,8 @@
         {% endif %}
         <div class="row">
             <!-- Показываем фильтры на всех устройствах только на главной странице -->
-            <div class="col-md-3 sidebar {% if request.path != '/' %}d-none d-md-block{% endif %}">
+<!--        <div class="col-md-3 sidebar {% if request.path != '/' %}d-none d-md-block{% endif %}"> # Старий варіант -->
+            <div class="col-md-3 sidebar {% if request.path == '/account/profile/' or request.path|slice:":7" == "/order/" %}d-none{% elif request.path != '/' %}d-none d-md-block{% endif %}">
                 <h3>Фільтри</h3>
                 <ul class="list-unstyled">
                     <li>

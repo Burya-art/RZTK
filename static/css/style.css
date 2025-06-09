@@ -166,4 +166,18 @@ body {
 }
 .update-quantity-form input, .update-quantity-form button {  /* Стилі для поля і кнопки */
     vertical-align: middle;
+}
+
+.product-card a {
+    text-decoration: none;
+}
+
+.product-card h5 {
+    font-weight: 400;         /* трохи тонший шрифт (за замовчуванням 500–600) */
+    color: #221f1f; /* Колір назви продукту */
+}
+
+.product-card h5:hover {
+    color: #f80000; /* Колір при наведенні */
+}
 

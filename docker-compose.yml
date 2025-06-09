@@ -1,0 +1,101 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DB_NAME:-rztk_db}
+      POSTGRES_USER: ${DB_USER:-rztk_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-12345}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rztk_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rztk_user -d rztk_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    networks:
+      - rztk_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Команда для тестирования через Docker локально
+    command: python manage.py runserver 0.0.0.0:8000
+#      sh -c "python manage.py migrate &&
+#             python manage.py collectstatic --noinput &&
+#             python manage.py loaddata shop/fixtures/initial_data.json || true &&
+#             gunicorn rztk_project.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=rztk_db
+      - DB_USER=rztk_user
+      - DB_PASSWORD=12345
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    networks:
+      - rztk_network
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A rztk_project worker --loglevel=info
+    environment:
+      - DB_HOST=db
+      - DB_NAME=rztk_db
+      - DB_USER=rztk_user
+      - DB_PASSWORD=12345
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      web:
+        condition: service_started
+    volumes:
+      - .:/app
+    networks:
+      - rztk_network
+
+  nginx:
+    image: nginx:1.25
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - web
+    networks:
+      - rztk_network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  rztk_network:
+    driver: bridge
