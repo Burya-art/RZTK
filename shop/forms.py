@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import BasketItem, Order
+from .models import BasketItem, Order, Review
 
 
 class UserRegisterForm(UserCreationForm):
@@ -45,3 +45,29 @@ class OrderForm(forms.ModelForm):
         if not address:
             raise forms.ValidationError("Будь ласка, оберіть відділення Нової Пошти.")
         return address
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Ваш коментар'}),
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,6 +18,7 @@ urlpatterns = [
     path('get-nova-poshta-cities/', views.get_nova_poshta_cities,
          name='get_nova_poshta_cities'),
     path('', views.product_list, name='product_list'),  # показує всі товари
+    path('review/<int:review_id>/delete/', views.delete_review, name='delete_review'),
     path('<slug:category_slug>/', views.product_list, name='product_list_by_category'),  # показує товари конкретної категорії
     path('<slug:category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),  # детальна сторінка товару
 ]

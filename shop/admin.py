@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Brand, Basket, BasketItem, Order, OrderItem
+from .models import Category, Product, Brand, Basket, BasketItem, Order, OrderItem, Review
 
 
 @admin.register(Category)
@@ -37,10 +37,27 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['status', 'created']
     search_fields = ['user__username', 'address']
 
+
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'product', 'quantity', 'price']
     list_filter = ['order']
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'created']
+    list_filter = ['created']
+    search_fields = ['user__username', 'product__name']
+
+
+
+
+
+
+
+
+
 
 
 

@@ -181,3 +181,6 @@ body {
     color: #f80000; /* Колір при наведенні */
 }
 
+.review-form textarea {
+    resize: vertical;
+}

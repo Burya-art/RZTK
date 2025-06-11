@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from .models import Category, Brand, Product, Basket, BasketItem, Order, OrderItem
+from .models import Category, Brand, Product, Basket, BasketItem, Order, OrderItem, Review
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import BasketItemForm, OrderForm
+from django.db import IntegrityError
+from .forms import BasketItemForm, OrderForm, ReviewForm
 from django.views.decorators.csrf import csrf_exempt
 from .services.nova_poshta import NovaPoshtaService
 from rztk_project.settings import NOVA_POSHTA_API_KEY
 import logging
+from django.core.exceptions import PermissionDenied
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,20 @@ def product_list(request, category_slug=None):
 def product_detail(request, category_slug, product_slug):
     category = get_object_or_404(Category, slug=category_slug)
     product = get_object_or_404(Product, category=category, slug=product_slug, available=True)
+    review_form = ReviewForm()
+
+    if request.method == 'POST' and request.user.is_authenticated:
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            try:
+                review.save()
+                messages.success(request, 'Відгук успішно додано!')
+                return redirect('shop:product_detail', category_slug=category_slug, product_slug=product_slug)
+            except IntegrityError:
+                messages.error(request, 'Ви вже залишили відгук для цього товару.')
 
     return render(
         request,
@@ -65,7 +81,9 @@ def product_detail(request, category_slug, product_slug):
             'category': category,
             'product': product,
             'categories': Category.objects.all(),
-            'brands': Brand.objects.all()
+            'brands': Brand.objects.all(),
+            'review_form': review_form,
+            'reviews': product.reviews.all()
         })
 
 
@@ -85,7 +103,7 @@ def add_to_basket(request, product_id):
             basket_item.save()
 
         messages.success(request, 'Товар успішно додано до кошика!')
-        return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug,)
+        return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug, )
     return redirect('shop:product_list')
 
 
@@ -130,7 +148,8 @@ def remove_from_basket(request, item_id):
 def create_order(request):  # Функция для создания заказа
     basket = get_object_or_404(Basket, user=request.user)  # Получает корзину пользователя или 404, если нет
     if not basket.items.exists():  # Проверяет, есть ли товары в корзине
-        messages.error(request, 'Ваш кошик порожній. Додайте товари перед оформленням замовлення.')  # Сообщение об ошибке, если корзина пуста
+        messages.error(request,
+                       'Ваш кошик порожній. Додайте товари перед оформленням замовлення.')  # Сообщение об ошибке, если корзина пуста
         return redirect('shop:basket_detail')  # Перенаправляет на страницу корзины
 
     if request.method == 'POST':  # Проверяет, что запрос — POST (форма отправлена)
@@ -205,3 +224,14 @@ def get_nova_poshta_warehouses(request):
     warehouses = nova_poshta_service.get_warehouses(city)
     logger.debug(f"Returned warehouses for {city}: {warehouses}")
     return JsonResponse({'warehouses': warehouses})
+
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+    if request.method == 'POST':
+        product = review.product
+        review.delete()
+        messages.success(request, 'Відгук успішно видалено!')
+        return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug)
+    raise PermissionDenied

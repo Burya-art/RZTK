@@ -30,4 +30,40 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Секція для відгуків -->
+<div class="mt-5">
+    <h3>Відгуки</h3>
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="border p-3 mb-3">
+                <p><strong>{{ review.user.username }}</strong> ({{ review.created|date:"d.m.Y" }})</p>
+                {% if review.comment %}
+                    <p>{{ review.comment }}</p>
+                {% endif %}
+                {% if review.user == user %}
+                <div style="display: flex; justify-content: flex-end;">
+                    <form action="{% url 'shop:delete_review' review.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger save-scroll">Видалити</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Відгуків поки немає.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <h4>Залишити відгук</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" class="btn btn-primary">Надіслати відгук</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'account:login' %}">Увійдіть</a>, щоб залишити відгук.</p>
+    {% endif %}
+</div>
 {% endblock %}
