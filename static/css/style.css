@@ -184,3 +184,39 @@ body {
 .review-form textarea {
     resize: vertical;
 }
+
+/* Фільтрація по цінам */
+
+.price-input {
+    width: 120px;
+}
+
+/* Фільтрація по цінам */
+
+.sort-dropdown-toggle {
+    width: 195px;
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    color: #495057;
+}
+
+.sort-dropdown-toggle:hover {
+    background-color: color: rgba(109, 110, 109, 0.3);
+}
+
+.sort-dropdown-toggle:focus {
+    background-color: transparent;
+    color: #495057;
+    box-shadow: none;
+}
+
+.sidebar .btn-primary {
+    background-color: #21a046;
+    border-color: #21a046;
+    width: white;
+}
+
+.sidebar .btn-primary:active {
+    background-color: #28b850;
+    border-color: #28b850;
+}

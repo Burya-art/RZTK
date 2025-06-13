@@ -43,6 +43,40 @@ def product_list(request, category_slug=None):
         brand = get_object_or_404(Brand, slug=brand_filter)
         products = products.filter(brand=brand)
 
+    price_min = request.GET.get('price_min')
+    price_max = request.GET.get('price_max')
+    if price_min or price_max:
+        try:
+            if price_min:
+                price_min = float(price_min)
+                if price_min < 0:
+                    messages.error(request, 'Мінімальна ціна не може бути від’ємною.')
+                    price_min = None
+            else:
+                price_min = None
+            if price_max:
+                price_max = float(price_max)
+                if price_max < 0:
+                    messages.error(request, 'Максимальна ціна не може бути від’ємною.')
+                    price_max = None
+            else:
+                price_max = None
+            if price_min is not None and price_max is not None and price_min > price_max:
+                messages.error(request, 'Мінімальна ціна не може бути більшою за максимальну.')
+            elif price_min is not None or price_max is not None:
+                if price_min is not None:
+                    products = products.filter(price__gte=price_min)
+                if price_max is not None:
+                    products = products.filter(price__lte=price_max)
+        except ValueError:
+            messages.error(request, 'Некоректний формат цін.')
+
+    sort = request.GET.get('sort')
+    if sort == 'price_asc':
+        products = products.order_by('price')
+    elif sort == 'price_desc':
+        products = products.order_by('-price')
+
     return render(
         request,
         'shop/product/list.html',

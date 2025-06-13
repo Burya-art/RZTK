@@ -1,16 +1,17 @@
 {% extends "shop/base.html" %}
 {% load static %}
-{% block title %}Products{% endblock %}
+{% block title %}Продукти{% endblock %}
 
 {% block content %}
 <h2>{% if search_query %}
-        Search results for "{{ search_query }}"
+        Результати пошуку для "{{ search_query }}"
     {% elif category %}
         {{ category.name }}
     {% else %}
-        All Products
+        Усі продукти
     {% endif %}
 </h2>
+
 <div class="row">
     {% for product in products %}
     <div class="col-md-4">
@@ -27,7 +28,7 @@
         </div>
     </div>
     {% empty %}
-    <p>No products available in this category.</p>
+    <p>Немає доступних продуктів у цій категорії.</p>
     {% endfor %}
 </div>
 {% endblock %}
