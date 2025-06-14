@@ -109,6 +109,7 @@ class Order(models.Model):
         ('pending', 'Очікує обробки'),
         ('shipped', 'Відправлено'),
         ('delivered', 'Доставлено'),
+        ('cancelled', 'Скасовано'),
     ], default='pending')
 
     class Meta:

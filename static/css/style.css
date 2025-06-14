@@ -220,3 +220,23 @@ body {
     background-color: #28b850;
     border-color: #28b850;
 }
+
+/* Пагінатор */
+
+.pagination .page-link {
+    color: #221f1f;
+    background-color: transparent;
+    border: 2px solid transparent; /* Прозорий бордер за замовчуванням */
+}
+
+.pagination .page-item.active .page-link {
+    color: #221f1f;
+    background-color: transparent;
+    border: 2px solid transparent; /* Прозорий бордер для активної сторінки */
+}
+
+.pagination .page-link:hover {
+    color: #221f1f;
+    background-color: transparent;
+    border: 2px solid #221f1f; /* Колір бордера при наведенні */
+

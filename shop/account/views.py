@@ -29,3 +29,13 @@ def profile(request):
         request,
         'shop/account/profile.html',
         {'user': request.user, 'orders': orders})
+
+
+@login_required
+def cancel_order(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+    if request.method == 'POST' and order.status == 'pending':
+        order.status = 'cancelled'
+        order.save()
+        messages.success(request, 'Замовлення скасовано.')
+    return redirect('account:profile')

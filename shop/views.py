@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import Category, Brand, Product, Basket, BasketItem, Order, OrderItem, Review
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
@@ -42,6 +43,16 @@ def product_list(request, category_slug=None):
     if brand_filter := request.GET.get('brand'):
         brand = get_object_or_404(Brand, slug=brand_filter)
         products = products.filter(brand=brand)
+
+    # Пагінація
+    paginator = Paginator(products, 9)  # 6 продуктів на сторінку
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
 
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
