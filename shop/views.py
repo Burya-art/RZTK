@@ -45,7 +45,7 @@ def product_list(request, category_slug=None):
         products = products.filter(brand=brand)
 
     # Пагінація
-    paginator = Paginator(products, 9)  # 6 продуктів на сторінку
+    paginator = Paginator(products, 9)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
