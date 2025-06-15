@@ -3,6 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+
 <h2>{% if search_query %}
         Результати пошуку для "{{ search_query }}"
     {% elif category %}
@@ -55,4 +56,27 @@
         </ul>
     </nav>
 {% endif %}
+
+<!-- Секція рекомендацій на основі переглядів -->
+{% if recommended_products %}
+<div class="mb-4 recommendations-container">
+    <h3>Рекомендації на основі ваших переглядів</h3>
+    <div class="d-flex flex-row flex-nowrap overflow-auto">
+        {% for product in recommended_products %}
+        <div class="product-card me-3" style="min-width: 200px; max-width: 200px;">
+            <a href="{% url 'shop:product_detail' product.category.slug product.slug %}">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                {% else %}
+                    <img src="{% static 'img/Placeholder-1.png' %}" alt="No Image" class="img-fluid">
+                {% endif %}
+                <h5 class="mt-2">{{ product.name }}</h5>
+            </a>
+            <p class="text-muted">{{ product.price }} грн</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
 {% endblock %}

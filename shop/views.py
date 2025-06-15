@@ -12,6 +12,7 @@ from .services.nova_poshta import NovaPoshtaService
 from rztk_project.settings import NOVA_POSHTA_API_KEY
 import logging
 from django.core.exceptions import PermissionDenied
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,34 @@ def product_list(request, category_slug=None):
     categories = Category.objects.all()
     brands = Brand.objects.all()
     products = Product.objects.filter(available=True)
+
+    # Логіка для рекомендацій на основі переглядів #777
+    recommended_products = None  # 777
+    session_key = f'recommended_products_{request.user.id}' if request.user.is_authenticated else 'recommended_products_guest'  # 777
+    if request.user.is_authenticated:  # 777
+        viewed_product_ids = cache.get(f'viewed_products_{request.user.id}', [])  # 777
+        if viewed_product_ids and request.session.get('product_viewed', False):  # 777
+            # Отримуємо переглянуті товари #777
+            viewed_products = Product.objects.filter(id__in=viewed_product_ids, available=True)  # 777
+            # Отримуємо унікальні комбінації категорій і брендів #777
+            viewed_combinations = viewed_products.values('category_id', 'brand_id').distinct()  # 777
+            # Формуємо Q-об'єкти для комбінацій #777
+            query = Q()  # 777
+            for combo in viewed_combinations:  # 777
+                query |= Q(category_id=combo['category_id'], brand_id=combo['brand_id'])  # 777
+            # Вибираємо до 5 випадкових товарів із комбінацій #777
+            recommended_products = Product.objects.filter(  # 777
+                query, available=True  # 777
+            ).exclude(id__in=viewed_product_ids).order_by('?')[:6]  # 777
+            # Зберігаємо рекомендації в сесії #777
+            request.session[session_key] = [p.id for p in recommended_products]  # 777
+            request.session['product_viewed'] = False  # 777
+        else:  # 777
+            # Використовуємо кешовані рекомендації, якщо є #777
+            recommended_product_ids = request.session.get(session_key, [])  # 777
+            if recommended_product_ids:  # 777
+                recommended_products = Product.objects.filter(id__in=recommended_product_ids, available=True)  # 777
+            # Якщо немає переглянутих товарів, рекомендації не показуємо #777
 
     if search_query := request.GET.get('q'):
         products = products.filter(
@@ -43,16 +72,6 @@ def product_list(request, category_slug=None):
     if brand_filter := request.GET.get('brand'):
         brand = get_object_or_404(Brand, slug=brand_filter)
         products = products.filter(brand=brand)
-
-    # Пагінація
-    paginator = Paginator(products, 9)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
 
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
@@ -88,6 +107,16 @@ def product_list(request, category_slug=None):
     elif sort == 'price_desc':
         products = products.order_by('-price')
 
+    # Пагінація
+    paginator = Paginator(products, 9)
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
     return render(
         request,
         'shop/product/list.html',
@@ -98,12 +127,22 @@ def product_list(request, category_slug=None):
             'brands': brands,
             'products': products,
             'search_query': search_query,
+            'recommended_products': recommended_products,
         })
 
 
 def product_detail(request, category_slug, product_slug):
     category = get_object_or_404(Category, slug=category_slug)
     product = get_object_or_404(Product, category=category, slug=product_slug, available=True)
+    # Зберігаємо ID переглянутого товару в Redis для рекомендацій #777
+    if request.user.is_authenticated:  # 777
+        viewed_products = cache.get(f'viewed_products_{request.user.id}', [])  # 777
+        if product.id not in viewed_products:  # 777
+            viewed_products.append(product.id)  # 777
+            if len(viewed_products) > 10:  # 777
+                viewed_products.pop(0)  # 777
+            cache.set(f'viewed_products_{request.user.id}', viewed_products, timeout=3600 * 24 * 30)  # 777
+        request.session['product_viewed'] = True  # 777
     review_form = ReviewForm()
 
     if request.method == 'POST' and request.user.is_authenticated:
