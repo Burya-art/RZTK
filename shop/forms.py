@@ -2,14 +2,47 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import BasketItem, Order, Review
+from django.core.exceptions import ValidationError
+import re
 
 
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(label="Електронна пошта", required=True)
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+        labels = {
+            'username': "Ім'я користувача",
+            'password1': 'Пароль',
+            'password2': 'Підтвердження пароля',
+        }
+        error_messages = {
+            'password_mismatch': 'Паролі не збігаються.',
+        }
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) > 20:  #777
+            raise ValidationError('Ім\'я користувача не може перевищувати 20 символів.')  #777
+        if not re.match(r'^[\w.@+-]+$', username):
+            raise ValidationError('Ім\'я користувача може містити лише літери, цифри та символи @/./+/-/_ .')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError('Це ім\'я користувача вже зайняте.')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Ця електронна пошта вже зареєстрована.')
+        return email
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise ValidationError('Паролі не збігаються.')
+        return password2
 
 
 class BasketItemForm(forms.ModelForm):
@@ -54,20 +87,3 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Ваш коментар'}),
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

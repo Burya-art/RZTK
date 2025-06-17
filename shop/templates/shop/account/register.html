@@ -1,22 +1,72 @@
 {% extends "shop/base.html" %}
 
 {% block title %}
-    Register
+    Реєстрація
 {% endblock %}
 
 {% block content %}
-    <h2>Register</h2>
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
-                {{ message }}
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Реєстрація</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Ім'я користувача</label>
+                <input type="text" name="username" id="id_username" class="form-control" value="{{ form.username.value|default_if_none:'' }}" required>
+                {% if form.username.errors %}
+                    <div class="text-danger">
+                        {% for error in form.username.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
-        {% endfor %}
-    {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'account:login' %}">Login here</a>.</p>
+            <div class="mb-3">
+                <label for="id_email" class="form-label">Електронна пошта</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" required>
+                {% if form.email.errors %}
+                    <div class="text-danger">
+                        {% for error in form.email.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="id_password1" class="form-label">Пароль</label>
+                <input type="password" name="password1" id="id_password1" class="form-control" required>
+                {% if form.password1.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password1.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <small class="form-text text-muted">
+                    Пароль повинен містити щонайменше 8 символів, не бути занадто поширеним або складатися лише з цифр.
+                </small>
+            </div>
+            <div class="mb-3">
+                <label for="id_password2" class="form-label">Підтвердження пароля</label>
+                <input type="password" name="password2" id="id_password2" class="form-control" required>
+                {% if form.password2.errors %}
+                    <div class="text-danger">
+                        {% for error in form.password2.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Зареєструватися</button>
+            </div>
+        </form>
+        <p class="text-center mt-3">Вже маєте обліковий запис? <a href="{% url 'account:login' %}">Увійдіть тут</a>.</p>
+    </div>
 {% endblock %}

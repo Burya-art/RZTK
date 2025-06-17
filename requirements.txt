@@ -11,3 +11,5 @@ celery==5.4.0
 django-celery-results==2.6.0
 pytest==8.3.2
 pytest-django==4.8.0
+amqp==5.2.0
+kombu==5.4.0

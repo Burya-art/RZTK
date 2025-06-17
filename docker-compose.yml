@@ -15,12 +15,18 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rztk_user}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-12345}
+    ports:
+      - "5672:5672"  # AMQP порт
+      - "15672:15672"  # Management UI (опціонально)
     networks:
       - rztk_network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "rabbitmqctl", "status"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -41,11 +47,13 @@ services:
       - DB_USER=rztk_user
       - DB_PASSWORD=12345
       - DB_PORT=5432
-      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=rztk_user
+      - RABBITMQ_PASSWORD=12345
     depends_on:
       db:
         condition: service_healthy
-      redis:
+      rabbitmq:
         condition: service_healthy
     volumes:
       - .:/app
@@ -65,11 +73,13 @@ services:
       - DB_USER=rztk_user
       - DB_PASSWORD=12345
       - DB_PORT=5432
-      - REDIS_HOST=redis
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_USER=rztk_user
+      - RABBITMQ_PASSWORD=12345
     depends_on:
       db:
         condition: service_healthy
-      redis:
+      rabbitmq:
         condition: service_healthy
       web:
         condition: service_started

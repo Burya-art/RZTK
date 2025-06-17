@@ -89,8 +89,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Интернационализация
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'uk'        # українська мова
+TIME_ZONE = 'Europe/Kyiv'   # часова зона України
 USE_I18N = True
 USE_TZ = True
 
@@ -126,6 +126,12 @@ CACHES = {
     }
 }
 
+# Настройки RabbitMQ
+RABBITMQ_HOST = env('RABBITMQ_HOST', default='localhost')
+RABBITMQ_PORT = env('RABBITMQ_PORT', default='5672')
+RABBITMQ_USER = env('RABBITMQ_USER', default='rztk_user')
+RABBITMQ_PASSWORD = env('RABBITMQ_PASSWORD', default='12345')
+
 # API Новая Почта
 NOVA_POSHTA_API_KEY = env('NOVA_POSHTA_API_KEY', default='')
 
@@ -149,7 +155,7 @@ LOGGING = {
 }
 
 # Celery настройки
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
