@@ -49,6 +49,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'rztk_project.context_processors.categories_and_brands',
             ],
         },
     },
@@ -89,8 +90,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Интернационализация
-LANGUAGE_CODE = 'uk'        # українська мова
-TIME_ZONE = 'Europe/Kyiv'   # часова зона України
+LANGUAGE_CODE = 'uk'  # українська мова
+TIME_ZONE = 'Europe/Kyiv'  # часова зона України
 USE_I18N = True
 USE_TZ = True
 
