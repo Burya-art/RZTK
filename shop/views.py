@@ -318,3 +318,7 @@ def delete_review(request, review_id):
         messages.success(request, 'Відгук успішно видалено!')
         return redirect('shop:product_detail', category_slug=product.category.slug, product_slug=product.slug)
     raise PermissionDenied
+
+
+
+

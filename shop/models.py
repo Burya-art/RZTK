@@ -160,27 +160,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Відгук від {self.user.username} на {self.product.name}'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
