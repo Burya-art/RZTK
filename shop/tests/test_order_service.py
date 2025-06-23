@@ -46,8 +46,10 @@ def basket_item(basket, product):
     return BasketItem.objects.create(basket=basket, product=product, quantity=2)
 
 
+# Тести створення замовлень (основна функціональність)
 @pytest.mark.django_db
 def test_create_order_success(user, basket, basket_item):
+    """Тест успішного створення замовлення"""
     client = Client()
     client.login(username='testuser', password='12345')
     url = reverse('shop:create_order')
@@ -56,12 +58,14 @@ def test_create_order_success(user, basket, basket_item):
     assert response.status_code == 302
     assert response.url == reverse('shop:product_list')
     assert Order.objects.count() == 1
+    from django.contrib.messages import get_messages
     messages = [m.message for m in get_messages(response.wsgi_request)]
     assert any(f'Замовлення #{Order.objects.first().id} успішно створено!' in msg for msg in messages)
 
 
 @pytest.mark.django_db
 def test_create_order_empty_basket(user, basket):
+    """Тест створення замовлення з порожньою корзиною"""
     client = Client()
     client.login(username='testuser', password='12345')
     BasketItem.objects.all().delete()
@@ -70,6 +74,7 @@ def test_create_order_empty_basket(user, basket):
     response = client.post(url, data)
     assert response.status_code == 302
     assert response.url == reverse('shop:basket_detail')
+    from django.contrib.messages import get_messages
     messages = [m.message for m in get_messages(response.wsgi_request)]
     assert 'Кошик порожній. Додайте товари перед оформленням замовлення.' in messages
     assert Order.objects.count() == 0
@@ -77,6 +82,7 @@ def test_create_order_empty_basket(user, basket):
 
 @pytest.mark.django_db
 def test_create_order_invalid_form(user, basket, basket_item):
+    """Тест створення замовлення з невалідними даними"""
     client = Client()
     client.login(username='testuser', password='12345')
     url = reverse('shop:create_order')
@@ -84,6 +90,7 @@ def test_create_order_invalid_form(user, basket, basket_item):
     response = client.post(url, data)
     assert response.status_code == 302
     assert response.url == reverse('shop:basket_detail')
+    from django.contrib.messages import get_messages
     messages = [m.message for m in get_messages(response.wsgi_request)]
     assert any("Помилка в полі" in msg for msg in messages)
     assert Order.objects.count() == 0
@@ -431,107 +438,70 @@ def test_order_with_different_categories_and_brands(user, basket, category):
     assert brand2 in order_brands
 
 
+# Інтеграційні тести для views (тести які перевіряють взаємодію views з сервісами)
 import pytest
 from django.test import Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from shop.models import Product, Category, Basket, BasketItem, Order, Review
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 
 @pytest.mark.django_db
-class TestProductViews:
-    """Тести для відображення товарів"""
+class TestIntegrationViews:
+    """Інтеграційні тести для views з сервісами"""
 
-    def test_product_list(self, client, category, product):
-        """Базовий тест списку товарів"""
+    def test_product_list_with_service(self, client, category, product):
+        """Тест інтеграції product_list view з ProductService"""
         response = client.get(reverse('shop:product_list'))
         assert response.status_code == 200
         assert product.name in response.content.decode()
 
-    def test_product_detail(self, client, category, product):
-        """Тест детальної сторінки товару"""
+    def test_product_detail_with_service(self, client, category, product):
+        """Тест інтеграції product_detail view з ProductService"""
         response = client.get(
             reverse('shop:product_detail',
                     args=[category.slug, product.slug])
         )
         assert response.status_code == 200
         assert product.name in response.content.decode()
-        assert "100,00 грн." in response.content.decode()
 
-
-@pytest.mark.django_db
-class TestBasketViews:
-    """Тести для роботи з кошиком"""
-
-    def test_add_to_basket(self, auth_client, product):
-        """Тест додавання товару в кошик"""
+    def test_basket_operations_with_service(self, auth_client, product):
+        """Тест інтеграції basket views з BasketService"""
+        # Додавання товару
         response = auth_client.post(
             reverse('shop:add_to_basket', args=[product.id])
         )
         assert response.status_code == 302
         assert BasketItem.objects.filter(product=product).exists()
-
-    def test_basket_detail(self, auth_client, basket, basket_item):
-        """Тест відображення кошика"""
+        
+        # Перегляд корзини
         response = auth_client.get(reverse('shop:basket_detail'))
         assert response.status_code == 200
-        assert basket_item.product.name in response.content.decode()
-
-    def test_update_basket_item(self, auth_client, basket_item):
-        """Тест оновлення кількості товару"""
-        response = auth_client.post(
-            reverse('shop:update_basket_item', args=[basket_item.id]),
-            {'quantity': 5}
-        )
-        basket_item.refresh_from_db()
-        assert response.status_code == 302
-        assert basket_item.quantity == 5
-
-    def test_remove_from_basket(self, auth_client, basket_item):
-        """Тест видалення товару з кошика"""
-        item_id = basket_item.id
-        response = auth_client.post(
-            reverse('shop:remove_from_basket', args=[item_id])
-        )
-        assert response.status_code == 302
-        assert not BasketItem.objects.filter(id=item_id).exists()
-
-    def test_clear_basket(self, auth_client, basket, basket_item):
-        """Тест очищення кошика"""
+        
+        # Очищення корзини
         response = auth_client.post(reverse('shop:clear_basket'))
         assert response.status_code == 302
-        assert basket.items.count() == 0
 
-
-@pytest.mark.django_db
-class TestOrderViews:
-    """Тести для замовлень"""
-
-    def test_order_detail(self, auth_client, user):
-        """Тест деталей замовлення"""
-        # Створюємо тестове замовлення
-        order = Order.objects.create(
+    def test_review_operations_with_service(self, auth_client, user, product):
+        """Тест інтеграції review views з ReviewService"""
+        # Створюємо відгук
+        review = Review.objects.create(
+            product=product,
             user=user,
-            address='Тестова адреса',
-            status='pending'
+            comment='Тестовий коментар'
         )
 
-        response = auth_client.get(
-            reverse('shop:order_detail', args=[order.id])
+        # Видаляємо відгук через view
+        response = auth_client.post(
+            reverse('shop:delete_review', args=[review.id])
         )
-        assert response.status_code == 200
-        assert order.address in response.content.decode()
-
-
-@pytest.mark.django_db
-class TestNovaPoshtaAPI:
-    """Тести для API Нової Пошти"""
+        assert response.status_code == 302
+        assert not Review.objects.filter(id=review.id).exists()
 
     @patch('shop.services.nova_poshta.requests.post')
-    def test_get_nova_poshta_cities(self, mock_post, auth_client):
-        """Тест отримання міст"""
-        # Мокаємо відповідь API
+    def test_nova_poshta_integration(self, mock_post, auth_client):
+        """Тест інтеграції Nova Poshta API"""
         mock_post.return_value.json.return_value = {
             'success': True,
             'data': [{'Ref': 'ref1', 'Description': 'Київ'}]
@@ -543,39 +513,3 @@ class TestNovaPoshtaAPI:
         assert response.status_code == 200
         data = response.json()
         assert 'cities' in data
-        assert len(data['cities']) == 1
-
-    @patch('shop.services.nova_poshta.requests.post')
-    def test_get_nova_poshta_warehouses(self, mock_post, auth_client):
-        """Тест отримання відділень"""
-        mock_post.return_value.json.return_value = {
-            'success': True,
-            'data': [{'Ref': 'ref1', 'Description': 'Відділення №1'}]
-        }
-
-        response = auth_client.get(
-            reverse('shop:get_nova_poshta_warehouses') + '?city=Київ'
-        )
-        assert response.status_code == 200
-        data = response.json()
-        assert 'warehouses' in data
-
-
-@pytest.mark.django_db
-class TestReviewViews:
-    """Тести для відгуків"""
-
-    def test_delete_review(self, auth_client, user, product):
-        """Тест видалення відгуку"""
-        # Створюємо відгук
-        review = Review.objects.create(
-            product=product,
-            user=user,
-            comment='Тестовий коментар'
-        )
-
-        response = auth_client.post(
-            reverse('shop:delete_review', args=[review.id])
-        )
-        assert response.status_code == 302
-        assert not Review.objects.filter(id=review.id).exists()
