@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from shop.models import Basket, Order, OrderItem
 
 
+# Функція create_order з views.py
 def create_order_from_basket(user, city, address, address_ref):
     """
     Створює замовлення з кошика користувача.
