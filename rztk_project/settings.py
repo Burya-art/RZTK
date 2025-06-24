@@ -20,6 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
+    'products.apps.ProductsConfig',
+    'basket.apps.BasketConfig',
+    'orders.apps.OrdersConfig',
+    'reviews.apps.ReviewsConfig',
     'django_redis',
     'django_celery_results',
 ]
@@ -107,7 +111,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Перенаправления
 LOGIN_REDIRECT_URL = 'account:profile'
-LOGOUT_REDIRECT_URL = 'shop:product_list'
+LOGOUT_REDIRECT_URL = 'products:product_list'
 LOGIN_URL = 'account:login'
 
 # Настройки Redis

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Деталі замовлення #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+    <h2>Деталі замовлення #{{ order.id }}</h2>
+    <p><strong>Дата:</strong> {{ order.created|date:"d.m.Y H:i" }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Адреса доставки:</strong> {{ order.address }}</p>
+
+    <h3>Товари у замовленні</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Загальна вартість</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }} грн</td>
+                    <td>{{ item.get_total_price }} грн</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Загальна сума:</strong> {{ order.get_total_price }} грн</p>
+
+    <a href="{% url 'account:profile' %}" class="btn btn-primary">Назад до профілю</a>
+{% endblock %}

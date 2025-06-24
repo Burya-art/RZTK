@@ -1,4 +1,4 @@
-from shop.models import Category, Brand
+from products.models import Category, Brand
 
 
 def categories_and_brands(request):

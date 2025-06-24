@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate
 from shop.forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from shop.models import Order
+from orders.models import Order
 
 
 def register(request):

@@ -24,7 +24,7 @@
                     <tbody>
                         {% for order in orders %}
                             <tr>
-                                <td class="align-middle"><a href="{% url 'shop:order_detail' order.id %}" class="text-decoration-none">{{ order.id }}</a></td>
+                                <td class="align-middle"><a href="{% url 'orders:order_detail' order.id %}" class="text-decoration-none">{{ order.id }}</a></td>
                                 <td class="align-middle">{{ order.created|date:"d.m.Y H:i" }}</td>
                                 <td class="align-middle">{{ order.get_status_display }}</td>
                                 <td class="align-middle">{{ order.get_total_price }} грн</td>
@@ -48,7 +48,7 @@
         {% endif %}
 
         <div class="d-flex gap-3 mt-4">
-            <a href="{% url 'shop:product_list' %}" class="btn btn-primary">До покупок</a>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary">До покупок</a>
             <form method="POST" action="{% url 'account:logout' %}" class="d-inline-block">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger">Вийти</button>
