@@ -57,7 +57,7 @@
 
     {% if user.is_authenticated %}
         <h4>Залишити відгук</h4>
-        <form method="post">
+        <form method="post" action="{% url 'reviews:create_review' product.id %}">
             {% csrf_token %}
             {{ review_form.as_p }}
             <button type="submit" class="btn btn-primary">Надіслати відгук</button>

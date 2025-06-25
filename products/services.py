@@ -19,7 +19,6 @@ class ProductService:
         sort_by: Optional[str] = None
     ) -> List[Product]:
         """Застосовує фільтри та повертає відфільтровані продукти"""
-        # Базовий запит: тільки доступні товари
         products = Product.objects.filter(available=True)
         
         # Фільтр за текстом: шукаємо в назві та описі товару

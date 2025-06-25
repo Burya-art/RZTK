@@ -85,26 +85,6 @@ def product_detail(request, category_slug, product_slug):
     # Підготовлюємо порожню форму для нового відгуку
     review_form = ReviewForm()
 
-    # Обробляємо створення нового відгуку (тільки для авторизованих користувачів)
-    if request.method == 'POST' and request.user.is_authenticated:
-        review_form = ReviewForm(request.POST)
-        if review_form.is_valid():
-            # Створюємо відгук через ReviewService
-            review, success, error_message = ReviewService.create_review(
-                user=request.user,
-                product=product,
-                rating=review_form.cleaned_data.get('rating', 5),  # Рейтинг (за замовчуванням 5)
-                comment=review_form.cleaned_data['comment']         # Текст відгуку
-            )
-
-            if success:
-                messages.success(request, 'Відгук успішно додано!')
-                # Перенаправляємо на ту ж сторінку для оновлення списку відгуків
-                return redirect('products:product_detail', category_slug=category_slug, product_slug=product_slug)
-            else:
-                # Показуємо помилку (наприклад, користувач вже залишив відгук)
-                messages.error(request, error_message)
-
     # Відображаємо шаблон з усіма даними
     return render(
         request,
