@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'reviews.apps.ReviewsConfig',
     'account.apps.AccountConfig',
+    'nova_poshta.apps.NovaPoshtaConfig',
     'django_redis',
     'django_celery_results',
 ]

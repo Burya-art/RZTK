@@ -138,8 +138,8 @@
                     addressSelect.innerHTML = '<option value="">Оберіть відділення</option>';
                 }
 
-                if (city.length < 3) {
-                    console.log('City length < 3, skipping fetch');
+                if (city.length < 2) {
+                    console.log('City length < 2, skipping fetch');
                     return;
                 }
 
@@ -147,7 +147,7 @@
                 debounceFetch(async () => {
                     console.log('Fetching cities for:', city);
                     try {
-                        const response = await fetch(`/orders/nova-poshta/cities/?city=${encodeURIComponent(city)}`);
+                        const response = await fetch(`/nova-poshta/cities/?city=${encodeURIComponent(city)}`);
                         console.log('Fetch response status:', response.status);
                         const data = await response.json();
                         console.log('Fetch response data:', data);
@@ -201,7 +201,7 @@
             async function fetchWarehouses(cityName) {
                 console.log('Fetching warehouses for:', cityName);
                 try {
-                    const response = await fetch(`/orders/nova-poshta/warehouses/?city=${encodeURIComponent(cityName)}`);
+                    const response = await fetch(`/nova-poshta/warehouses/?city=${encodeURIComponent(cityName)}`);
                     console.log('Warehouses fetch response status:', response.status);
                     const data = await response.json();
                     console.log('Warehouses fetch response data:', data);

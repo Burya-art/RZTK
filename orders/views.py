@@ -7,7 +7,7 @@ from .models import Order
 from .services import create_order_from_basket
 from products.models import Category, Brand
 from shop.forms import OrderForm
-from .nova_poshta import NovaPoshtaService
+from nova_poshta.services import NovaPoshtaService
 from rztk_project.settings import NOVA_POSHTA_API_KEY
 import logging
 
@@ -64,33 +64,3 @@ def order_detail(request, order_id):
             'brands': Brand.objects.all()        # Бренди для навігації
         }
     )
-
-
-@csrf_exempt
-def get_nova_poshta_cities(request):
-    """Отримує список міст через Nova Poshta API для автокомпліту"""
-    # Отримуємо назву міста з GET параметрів
-    city = request.GET.get('city', '')
-    if not city:
-        return JsonResponse({'error': "Місто обов'язкове"}, status=400)
-
-    # Запитуємо список міст через сервіс Nova Poshta
-    cities = nova_poshta_service.get_cities(city)
-    logger.debug(f"Returned cities for {city}: {cities}")
-    # Повертаємо JSON відповідь для JavaScript
-    return JsonResponse({'cities': cities})
-
-
-@csrf_exempt
-def get_nova_poshta_warehouses(request):
-    """Отримує список відділень Nova Poshta для конкретного міста"""
-    # Отримуємо назву міста з GET параметрів
-    city = request.GET.get('city', '')
-    if not city:
-        return JsonResponse({'error': "Місто обов'язкове"}, status=400)
-
-    # Запитуємо список відділень через сервіс Nova Poshta
-    warehouses = nova_poshta_service.get_warehouses(city)
-    logger.debug(f"Returned warehouses for {city}: {warehouses}")
-    # Повертаємо JSON відповідь для JavaScript
-    return JsonResponse({'warehouses': warehouses})

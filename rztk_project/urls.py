@@ -6,10 +6,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
-    # path('products/', include('products.urls')),
     path('basket/', include('basket.urls')),
     path('orders/', include('orders.urls')),
     path('reviews/', include('reviews.urls')),
+    path('nova-poshta/', include('nova_poshta.urls')),
     path('', include('products.urls')),
 ]
 
