@@ -18,7 +18,7 @@ def register(request):
             form = UserRegisterForm(request.POST)
     else:
         form = UserRegisterForm()
-    return render(request, 'shop/account/register.html', {'form': form})
+    return render(request, 'account/register.html', {'form': form})
 
 
 @login_required
@@ -27,7 +27,7 @@ def profile(request):
         '-created')  # Отримуємо замовлення користувача, сортуємо за датою (нові зверху)
     return render(
         request,
-        'shop/account/profile.html',
+        'account/profile.html',
         {'user': request.user, 'orders': orders})
 
 

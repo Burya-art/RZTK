@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'basket.apps.BasketConfig',
     'orders.apps.OrdersConfig',
     'reviews.apps.ReviewsConfig',
+    'account.apps.AccountConfig',
     'django_redis',
     'django_celery_results',
 ]
@@ -45,7 +46,7 @@ ROOT_URLCONF = 'rztk_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'shop/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

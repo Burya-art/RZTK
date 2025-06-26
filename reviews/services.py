@@ -9,7 +9,7 @@ class ReviewService:
     """Сервіс для роботи з відгуками"""
     
     @staticmethod
-    def create_review(user: User, product: Product, comment: str, rating: int = None) -> tuple:
+    def create_review(user: User, product: Product, comment: str) -> tuple:
         """
         Створює новий відгук для продукту.
         Повертає (review, success, error_message)
