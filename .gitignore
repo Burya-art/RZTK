@@ -27,3 +27,4 @@ staticfiles/
 *.env
 
 .idea/.coverage
+.coverage
