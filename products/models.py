@@ -16,7 +16,7 @@ class Brand(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('products:product_list', kwargs={'brand': self.slug})
+        return reverse('products:product_list') + f'?brand={self.slug}'
 
 
 class Category(models.Model):

@@ -1,4 +1,4 @@
-import pytest 111
+import pytest
 from decimal import Decimal
 from products.models import Brand, Category, Product
 

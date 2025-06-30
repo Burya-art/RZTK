@@ -12,7 +12,7 @@ class TestProductModels:
         assert category.name == "Ноутбуки"
         assert category.slug == "notebooks"
         assert str(category) == "Ноутбуки"
-    
+
     def test_brand_creation(self, brand):
         """Тест створення бренду"""
         assert brand.name == "Apple"
