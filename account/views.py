@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from shop.forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 from orders.models import Order
 
 
@@ -19,6 +20,25 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'account/register.html', {'form': form})
+
+
+def user_login(request):
+    """Власний view для входу з підтримкою allauth тегів"""
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Ви успішно увійшли!')
+                return redirect('account:profile')
+        else:
+            messages.error(request, 'Невірний email або пароль.')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'account/custom_login.html', {'form': form})
 
 
 @login_required

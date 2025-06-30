@@ -19,7 +19,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # Потрібно для allauth
     'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'shop.apps.ShopConfig',
     'products.apps.ProductsConfig',
     'basket.apps.BasketConfig',
     'orders.apps.OrdersConfig',
@@ -37,6 +43,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # Потрібно для allauth
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -47,7 +54,7 @@ ROOT_URLCONF = 'rztk_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -194,3 +201,27 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ],
 }
+
+# Django Allauth - соціальна аутентифікація
+SITE_ID = 1  # ID сайту в Django sites framework
+
+# Бекенди для аутентифікації (звичайний + соціальний)
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Звичайний логін/пароль
+    'allauth.account.auth_backends.AuthenticationBackend',  # Соціальні мережі
+]
+
+# Налаштування allauth 
+SOCIALACCOUNT_QUERY_EMAIL = True  # Запитуємо email з соціальних мереж
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Автоматично переходимо до Google
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Автоматично створюємо акаунт через Google
+
+# Основні налаштування входу
+LOGIN_REDIRECT_URL = '/account/profile/'  # Куди перенаправити після успішного входу
+LOGIN_URL = '/account/login/'  # Наша сторінка входу  
+LOGOUT_REDIRECT_URL = '/'  # Куди перенаправити після виходу
+
+# Відключаємо allauth перевизначення URLs
+ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
+ACCOUNT_LOGIN_URL = None  # Не перевизначаємо login URL
+ACCOUNT_SIGNUP_URL = None  # Не перевизначаємо signup URL

@@ -28,3 +28,4 @@ staticfiles/
 
 .idea/.coverage
 .coverage
+htmlcov/

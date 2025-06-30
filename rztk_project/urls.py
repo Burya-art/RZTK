@@ -7,7 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('products.api_urls')),  # API endpoints
     path('api-auth/', include('rest_framework.urls')),  # DRF login/logout
-    path('account/', include('account.urls')),
+    path('account/', include('account.urls')),  # Наші сторінки
+    path('accounts/', include('allauth.urls')),  # Allauth URLs
     path('basket/', include('basket.urls')),
     path('orders/', include('orders.urls')),
     path('reviews/', include('reviews.urls')),
