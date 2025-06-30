@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar custom-navbar navbar-expand-lg mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'shop:product_list' %}">
+            <a class="navbar-brand" href="{% url 'products:product_list' %}">
                 <img src="{% static 'img/logo3.png' %}" alt="RZTK Logo" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -24,14 +24,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                     <div class="d-none d-lg-block" style="width: 200px;"></div>
-                    <form class="d-flex w-50 mx-auto my-2 my-lg-0" method="GET" action="{% url 'shop:product_list' %}">
+                    <form class="d-flex w-50 mx-auto my-2 my-lg-0" method="GET" action="{% url 'products:product_list' %}">
                         <input class="form-control form-control-sm me-2" type="search" name="q"
                                placeholder="Пошук..." aria-label="Search">
                         <button class="btn btn-sm search-btn" type="submit">Пошук</button>
                     </form>
                     <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mt-2 mt-md-0">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'shop:basket_detail' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Кошик</a>
+                            <a href="{% url 'basket:basket_detail' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Кошик</a>
                             <a href="{% url 'account:profile' %}" class="btn btn-outline-light btn-sm me-md-2 mb-2 mb-md-0">Профіль</a>
                             <form method="POST" action="{% url 'account:logout' %}" class="mb-2 mb-md-0">
                                 {% csrf_token %}
@@ -69,11 +69,11 @@
                     <h3>Фільтри</h3>
                     <ul class="list-unstyled">
                         <li>
-                            <a href="{% url 'shop:product_list' %}" {% if not category %}class="fw-bold"{% endif %}>Категорії</a>
+                            <a href="{% url 'products:product_list' %}" {% if not category %}class="fw-bold"{% endif %}>Категорії</a>
                         </li>
                         {% for cat in categories %}
                             <li>
-                                <a href="{% url 'shop:product_list' %}?category={{ cat.slug }}{% if brand %}&brand={{ brand.slug }}{% endif %}" {% if category and cat.slug == category.slug %}class="fw-bold"{% endif %}>
+                                <a href="{% url 'products:product_list' %}?category={{ cat.slug }}{% if brand %}&brand={{ brand.slug }}{% endif %}" {% if category and cat.slug == category.slug %}class="fw-bold"{% endif %}>
                                     {{ cat.name }}
                                 </a>
                             </li>
@@ -81,18 +81,18 @@
                     </ul>
                     <ul class="list-unstyled">
                         <li>
-                            <a href="{% url 'shop:product_list' %}" {% if not brand %}class="fw-bold"{% endif %}>Всі бренди</a>
+                            <a href="{% url 'products:product_list' %}" {% if not brand %}class="fw-bold"{% endif %}>Всі бренди</a>
                         </li>
                         {% for br in brands %}
                             <li>
-                                <a href="{% url 'shop:product_list' %}?brand={{ br.slug }}{% if category %}&category={{ category.slug }}{% endif %}" {% if brand and br.slug == brand.slug %}class="fw-bold"{% endif %}>
+                                <a href="{% url 'products:product_list' %}?brand={{ br.slug }}{% if category %}&category={{ category.slug }}{% endif %}" {% if brand and br.slug == brand.slug %}class="fw-bold"{% endif %}>
                                     {{ br.name }}
                                 </a>
                             </li>
                         {% endfor %}
                     </ul>
                     <h4>Фільтр за ціною</h4>
-                    <form method="GET" action="{% url 'shop:product_list' %}" class="price-filter-form">
+                    <form method="GET" action="{% url 'products:product_list' %}" class="price-filter-form">
                         <div class="mb-3">
                             <label for="price_min" class="form-label">Від</label>
                             <input type="number" name="price_min" id="price_min" class="form-control form-control-sm price-input" placeholder="0" value="{{ request.GET.price_min }}">
@@ -103,7 +103,7 @@
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-rztk btn-sm">Фільтрувати</button>
-                            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary btn-sm">Скинути</a>
+                            <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary btn-sm">Скинути</a>
                         </div>
                     </form>
                     <h4 class="mt-3">Сортування</h4>

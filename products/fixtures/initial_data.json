@@ -1,0 +1,355 @@
+[
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 13 Pro",
+      "slug": "iphone_13_pro",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2532x1170) / Apple A15 Bionic / подвійна основна камера: 12 Мп + 12 Мп, фронтальна камера: 12 Мп / 128 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM, eSIM / iOS 15",
+      "price": "28500.00",
+      "available": true,
+      "created": "2025-05-06T11:01:39.831Z",
+      "updated": "2025-05-08T07:30:25.735Z",
+      "image": "products/2025/05/08/498648051.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 13",
+      "slug": "iphone-13-pro",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2532x1170) / Apple A15 Bionic / потрійна основна камера: 12 Мп + 12 Мп + 12 Мп, фронтальна камера: 12 Мп / 128 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM / iOS 15",
+      "price": "22500.00",
+      "available": true,
+      "created": "2025-05-06T11:13:44.897Z",
+      "updated": "2025-05-08T07:30:51.351Z",
+      "image": "products/2025/05/08/221214135.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 15",
+      "slug": "iphone-15",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2556x1179) / Apple A16 Bionic / подвійна основна камера: 48 Мп + 12 Мп, фронтальна камера: 12 Мп / 256 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM / iOS 17",
+      "price": "32000.00",
+      "available": true,
+      "created": "2025-05-06T11:17:24.806Z",
+      "updated": "2025-05-06T11:17:24.806Z",
+      "image": "products/2025/05/06/364623614.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 15 Pro",
+      "slug": "iphone-15-pro",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2556x1179) / Apple A17 Pro / основна потрійна камера: 48 Мп + 12 Мп + 12 Мп, фронтальна камера: 12 Мп / 128 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM / iOS 17",
+      "price": "38000.00",
+      "available": true,
+      "created": "2025-05-06T11:18:13.020Z",
+      "updated": "2025-05-06T11:18:13.020Z",
+      "image": "products/2025/05/06/364827001.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 5,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 16",
+      "slug": "iphone-16",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2556x1179) / Apple A18 / подвійна основна камера: 48 Мп + 12 Мп, фронтальна камера: 12 Мп / 256 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM / iOS 18",
+      "price": "40000.00",
+      "available": true,
+      "created": "2025-05-06T11:20:37.668Z",
+      "updated": "2025-05-06T11:20:37.668Z",
+      "image": "products/2025/05/06/468888135.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 6,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 16 Pro",
+      "slug": "iphone-16-pro",
+      "description": "Екран (6.9\", OLED (Super Retina XDR), 2868x1320) / Apple A18 Pro / основна потрійна камера: 48 Мп + 48 Мп + 12 Мп, фронтальна камера: 12 Мп / 256 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / Nano-SIM / iOS 18",
+      "price": "55000.00",
+      "available": true,
+      "created": "2025-05-06T11:21:42.003Z",
+      "updated": "2025-05-06T11:21:42.003Z",
+      "image": "products/2025/05/06/468888082.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+      "category": 1,
+      "brand": 3,
+      "name": "iPhone 16e",
+      "slug": "iphone-16e",
+      "description": "Екран (6.1\", OLED (Super Retina XDR), 2532x1170) / Apple A18 / основна камера: 48 Мп, фронтальна камера: 12 Мп / 128 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / підтримка 2х СІМ-карт (Nano-SIM, eSIM) / iOS 18",
+      "price": "30000.00",
+      "available": true,
+      "created": "2025-05-06T11:22:46.325Z",
+      "updated": "2025-05-06T11:22:46.325Z",
+      "image": "products/2025/05/06/518373112.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 8,
+    "fields": {
+      "category": 1,
+      "brand": 4,
+      "name": "Galaxy S24 FE",
+      "slug": "galaxy-s24-fe",
+      "description": "Екран (6.7\", Dynamic AMOLED 2X, 2340x1080) / Samsung Exynos 2400e (3.1 ГГц + 2.9 ГГц + 클넷 + 1.95 ГГц) / потрійна основна камера: 50 Мп + 12 Мп + 8 Мп, фронтальна: 10 Мп / RAM 8 ГБ / 128 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / підтримка 2х SIM-карток (Nano-SIM, eSIM) / Android 14 / 4700 мА*год",
+      "price": "27000.00",
+      "available": true,
+      "created": "2025-05-06T11:25:26.610Z",
+      "updated": "2025-05-06T11:25:26.610Z",
+      "image": "products/2025/05/06/473822717.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 9,
+    "fields": {
+      "category": 1,
+      "brand": 4,
+      "name": "Galaxy S25 Ultra",
+      "slug": "galaxy-s25-ultra",
+      "description": "Екран (6.9\", Dynamic LTPO AMOLED 2X, 3120x1440) / Qualcomm Snapdragon 8 Elite for Galaxy (4.47 ГГц + 3.53 ГГц) / основна квадро-камера: 200 Мп + 50 Мп + 50 Мп + 10 Мп, фронтальна 12 Мп / RAM 12 ГБ / 512 ГБ вбудованої пам'яті / 3G / LTE / 5G / GPS / підтримка 2х SIM-карток (Nano-SIM, eSIM) / Android 15 / 5000 мА * год",
+      "price": "58000.00",
+      "available": true,
+      "created": "2025-05-06T11:38:43.980Z",
+      "updated": "2025-05-06T11:38:43.980Z",
+      "image": "products/2025/05/06/507062959.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 10,
+    "fields": {
+      "category": 1,
+      "brand": 4,
+      "name": "Galaxy A16",
+      "slug": "galaxy-a16",
+      "description": "Екран (6.7\", Super AMOLED, 2340x1080) / MediaTek Helio G99 (2.2 ГГц + 2.0 ГГц) / основна потрійна камера: 50 Мп + 5 Мп + 2 Мп, фронтальна 13 Мп / RAM 8 ГБ / 256 ГБ вбудованої пам'яті + microSD (до 1.5 ТБ) / 3G / LTE / GPS / підтримка 2х SIM-карт (Nano-SIM) / Android 14 / 5000 мА*год",
+      "price": "7500.00",
+      "available": true,
+      "created": "2025-05-06T11:39:34.926Z",
+      "updated": "2025-05-06T11:39:34.926Z",
+      "image": "products/2025/05/06/487792195.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 11,
+    "fields": {
+      "category": 1,
+      "brand": 4,
+      "name": "Galaxy A36",
+      "slug": "galaxy-a36",
+      "description": "Экран (6.7\", Super AMOLED, 2340x1080) / Qualcomm Snapdragon 6 Gen 3 (2.4 ГГц + 1.8 ГГц) / основная тройная камера: 50 Мп + 8 Мп + 5 Мп, фронтальная 12 Мп / RAM 8 ГБ / 256 ГБ встроенной памяти / 3G / LTE / 5G / GPS / A-GPS / ГЛОНАСС / BDS / поддержка 2х SIM-карт (Nano-SIM, eSIM) / Android 15 / 5000 мА*ч",
+      "price": "15500.00",
+      "available": true,
+      "created": "2025-05-06T11:40:24.501Z",
+      "updated": "2025-05-06T11:40:24.501Z",
+      "image": "products/2025/05/06/523631262.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 12,
+    "fields": {
+      "category": 1,
+      "brand": 4,
+      "name": "Galaxy A56",
+      "slug": "galaxy-a56",
+      "description": "Экран (6.7\", Super AMOLED, 2340x1080) / Samsung Exynos 1580 (1 x 2.9 ГГц + 3 x 2.6 ГГц + 4 x 1.95 ГГц) / основная тройная камера: 50 Мп + 12 Мп + 5 Мп, фронтальная 12 Мп / RAM 8 ГБ / 128 ГБ встроенной памяти / 3G / LTE / 5G / GPS / A-GPS / ГЛОНАСС / BDS / поддержка 2х SIM-карт (Nano-SIM, eSIM) / Android 15 / 5000 мА*ч",
+      "price": "18000.00",
+      "available": true,
+      "created": "2025-05-06T11:41:26.457Z",
+      "updated": "2025-05-06T11:41:26.457Z",
+      "image": "products/2025/05/06/523586802.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 13,
+    "fields": {
+      "category": 2,
+      "brand": 3,
+      "name": "MacBook Air 13\" M1",
+      "slug": "macbook-air-13-m1",
+      "description": "Екран 13.3\" Retina (2560x1600) WQXGA, глянсовий / Apple M1 / RAM 8 ГБ / SSD 256 ГБ / Apple M1 Graphics / Wi-Fi / Bluetooth / macOS Big Sur / 1.29 кг / сірий",
+      "price": "34000.00",
+      "available": true,
+      "created": "2025-05-06T11:42:54.019Z",
+      "updated": "2025-05-06T11:42:54.019Z",
+      "image": "products/2025/05/06/144249716.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 14,
+    "fields": {
+      "category": 2,
+      "brand": 3,
+      "name": "MacBook Air 13.6\" M2",
+      "slug": "macbook-air-136-m2",
+      "description": "Екран 13.6\" Liquid Retina (2560x1664), глянсовий / Apple M2 / RAM 16 ГБ / SSD 256 ГБ / Apple M2 Graphics (8 ядер) / Wi-Fi / Bluetooth / macOS Sequoia / 1.24 кг / золотий",
+      "price": "42000.00",
+      "available": true,
+      "created": "2025-05-06T11:46:52.559Z",
+      "updated": "2025-05-06T11:46:52.559Z",
+      "image": "products/2025/05/06/486195990.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 15,
+    "fields": {
+      "category": 2,
+      "brand": 3,
+      "name": "MacBook Air 13.6\" M4",
+      "slug": "macbook-air-136-m4",
+      "description": "Екран 13.6\" Liquid Retina (2560x1664), глянсовий / Apple M4 / RAM 16 ГБ / SSD 256 ГБ / Apple M4 Graphics (8 ядер) / Wi-Fi / Bluetooth / macOS Sequoia / 1.24 кг / блакитний",
+      "price": "54000.00",
+      "available": true,
+      "created": "2025-05-06T11:48:02.947Z",
+      "updated": "2025-05-06T11:48:02.947Z",
+      "image": "products/2025/05/06/523953766.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 16,
+    "fields": {
+      "category": 2,
+      "brand": 3,
+      "name": "MacBook Pro 16\" M4 Pro",
+      "slug": "macbook-pro-16-m4-pro",
+      "description": "Екран 16.2\" Liquid Retina XDR (3456x2234) 120 Гц, глянсовий / Apple M4 Pro / RAM 48 ГБ / SSD 512 ГБ / Apple M4 Pro Graphics (20 ядер) / без ОД / Wi-Fi / Bluetooth / веб-камера / macOS Sequoia / 2.14 кг / сріблястий",
+      "price": "120000.00",
+      "price": "120000.00",
+      "available": true,
+      "created": "2025-05-06T11:49:03.382Z",
+      "updated": "2025-05-06T11:49:03.382Z",
+      "image": "products/2025/05/06/485312717.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 17,
+    "fields": {
+      "category": 2,
+      "brand": 4,
+      "name": "Galaxy Book Go",
+      "slug": "galaxy-book-go",
+      "description": "Ноутбук Samsung Galaxy Book Go NP340XLAKA5 14\" FullHD Snapdragon 7c Gen 2, Adreno 618, 4/64GB eUFS, легкий ноутбук для навчання та роботи (вітрина, царапини)",
+      "price": "7700.00",
+      "available": true,
+      "created": "2025-05-06T11:52:16.527Z",
+      "updated": "2025-05-06T11:52:42.746Z",
+      "image": "products/2025/05/06/542816195.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 18,
+    "fields": {
+      "category": 2,
+      "brand": 4,
+      "name": "Galaxy Book4 Edge",
+      "slug": "galaxy-book4-edge",
+      "description": "Дисплей: 15,6″; 1920×1080; Процесор: Qualcomm Snapdragon X Plus X1P-42-100; 3,2 ГГц Відеокарта: Qualcomm Adreno ОЗП: 16 ГБ; SSD: 256 ГБ ОС: Windows 11 Home",
+      "price": "32000.00",
+      "available": true,
+      "created": "2025-05-06T11:53:25.849Z",
+      "updated": "2025-05-06T11:53:25.849Z",
+      "image": "products/2025/05/06/540345942.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 20,
+    "fields": {
+      "category": 2,
+      "brand": 4,
+      "name": "Galaxy Book3",
+      "slug": "galaxy-book3",
+      "description": "Intel Core i5-1335U (1.3 - 4.6 ГГц), Windows 11 Pro, 16 ГБ / SSD 512 ГБ, 15.6” (1920x1080) Antiglare Full HD, Intel, Bluetooth 5.1, WiFi 6 (802.11ax), microSD, 2xUSB Type-C, 1xUSB 3.2, HDMI, вебкамера HD 720p, Fingerprint, колір сріблястий",
+      "price": "28000.00",
+      "available": true,
+      "created": "2025-05-06T11:55:08.433Z",
+      "updated": "2025-05-06T11:55:08.433Z",
+      "image": "products/2025/05/06/510112345.webp"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 21,
+    "fields": {
+      "category": 2,
+      "brand": 4,
+      "name": "Galaxy Book4 Pro",
+      "slug": "galaxy-book4-pro",
+      "description": "Samsung Galaxy Book4 Pro • 16’’ AMOLED (2880x1800) 2.8K 120 Гц Touchscreen• Intel Core Ultra 7 155H (1.4 - 4.8 Ггц) • RAM 16 ГБ • SSD 1 ТБ • Intel Arc Graphics • Windows 11 Home • Moonston",
+      "price": "72000.00",
+      "available": true,
+      "created": "2025-05-06T11:56:41.283Z",
+      "updated": "2025-05-06T11:59:07.107Z",
+      "image": "products/2025/05/06/539051582.webp"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "name": "Смартфони",
+      "slug": "smartfoni"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 2,
+    "fields": {
+      "name": "Ноутбуки",
+      "slug": "noutbuki"
+    }
+  },
+  {
+    "model": "products.brand",
+    "pk": 3,
+    "fields": {
+      "name": "Apple",
+      "slug": "apple"
+    }
+  },
+  {
+    "model": "products.brand",
+    "pk": 4,
+    "fields": {
+      "name": "Samsung",
+      "slug": "samsung"
+    }
+  }
+]

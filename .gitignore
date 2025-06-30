@@ -26,4 +26,4 @@ staticfiles/
 # Env files
 *.env
 
-.idea/
+.idea/.coverage

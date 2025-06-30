@@ -105,7 +105,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: pytest shop/tests/ -v --cov=shop --cov-report=html
+    command: pytest -v --cov=products --cov-report=html
     environment:
       - DB_HOST=db
       - DB_NAME=rztk_db

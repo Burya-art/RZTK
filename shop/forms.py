@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import BasketItem, Order, Review
+from basket.models import BasketItem
+from orders.models import Order
+from reviews.models import Review
 from django.core.exceptions import ValidationError
 import re
 
