@@ -52,7 +52,7 @@
             <p class="text-center">У вас ще немає замовлень.</p>
         {% endif %}
 
-        <div class="d-flex gap-3 mt-4 justify-content-end">
+        <div class="d-flex gap-3 mt-4 justify-content-start">
             <a href="{% url 'products:product_list' %}" class="btn btn-primary">До покупок</a>
             <form method="POST" action="{% url 'account:logout' %}" class="d-inline-block">
                 {% csrf_token %}
