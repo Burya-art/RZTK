@@ -205,9 +205,10 @@ REST_FRAMEWORK = {
 # Django Allauth - соціальна аутентифікація
 SITE_ID = 1  # ID сайту в Django sites framework
 
-# Бекенди для аутентифікації (звичайний + соціальний)
+# Бекенди для аутентифікації (email + соціальний)
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Звичайний логін/пароль
+    'account.backends.EmailBackend',  # Аутентифікація через email
+    'django.contrib.auth.backends.ModelBackend',  # Звичайний логін/пароль (резерв)
     'allauth.account.auth_backends.AuthenticationBackend',  # Соціальні мережі
 ]
 

@@ -12,7 +12,7 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, 'Реєстрація пройшла успішно!')
             return redirect('account:profile')
         else:
@@ -23,19 +23,23 @@ def register(request):
 
 
 def user_login(request):
-    """Власний view для входу з підтримкою allauth тегів"""
+    """Власний view для входу з підтримкою email замість username"""
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, 'Ви успішно увійшли!')
-                return redirect('account:profile')
+        email = request.POST.get('username')  # Поле називається username але містить email
+        password = request.POST.get('password')
+        
+        # Аутентифікація через email
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user, backend='account.backends.EmailBackend')
+            messages.success(request, 'Ви успішно увійшли!')
+            return redirect('account:profile')
         else:
             messages.error(request, 'Невірний email або пароль.')
+            
+        # Створюємо форму з помилками для відображення
+        form = AuthenticationForm()
+        form.add_error('username', 'Невірний email або пароль.')
     else:
         form = AuthenticationForm()
     return render(request, 'account/custom_login.html', {'form': form})
