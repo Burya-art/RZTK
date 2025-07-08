@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Потрібно для allauth
     'rest_framework',
+    'drf_yasg',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -43,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Потрібно для allauth
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -226,3 +227,19 @@ LOGOUT_REDIRECT_URL = '/'  # Куди перенаправити після ви
 ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
 ACCOUNT_LOGIN_URL = None  # Не перевизначаємо login URL
 ACCOUNT_SIGNUP_URL = None  # Не перевизначаємо signup URL
+
+SOCIALACCOUNT_ADAPTER = 'account.adapters.GoogleSocialAccountAdapter'  # підключає кастомний адаптер
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [  # запитує дозвіл на профіль, email і фото
+            'profile',
+            'email',
+            'openid',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'VERIFIED_EMAIL': True,
+    }
+}

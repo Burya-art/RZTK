@@ -5,13 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h2 class="text-center mb-4">Ласкаво просимо, {{ user.username }}!</h2>
-        <div class="text-center mb-4">
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Дата реєстрації:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}
-            </p>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-3 text-center">
+            {% if user.userprofile.avatar %}
+                <img src="{{ user.userprofile.avatar }}"
+                     class="img-fluid rounded-circle"
+                     alt="Аватар {{ user.username }}"
+                     style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                     style="width: 150px; height: 150px;">
+                    <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+            {% endif %}
         </div>
+        <div class="col-md-9">
+            <h2>Ласкаво просимо, {{ user.username }}!</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Дата реєстрації:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+        </div>
+    </div>
+</div>
 
         <h3 class="mb-3">Ваші замовлення</h3>
         {% if orders %}
@@ -54,6 +69,9 @@
 
         <div class="d-flex gap-3 mt-4 justify-content-start">
             <a href="{% url 'products:product_list' %}" class="btn btn-primary">До покупок</a>
+            {% if user.is_staff %}
+                <a href="{% url 'account:debug_oauth' %}" class="btn btn-info">Debug OAuth</a>
+            {% endif %}
             <form method="POST" action="{% url 'account:logout' %}" class="d-inline-block">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger">Вийти</button>

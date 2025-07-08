@@ -34,9 +34,3 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['price', 'created', 'name']
     ordering = ['-created']
-    
-    def get_serializer_class(self):
-        """Спрощений серіалізатор для списку"""
-        if self.action == 'list':
-            return ProductListSerializer
-        return ProductSerializer
