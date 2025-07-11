@@ -41,6 +41,8 @@ services:
 #             python manage.py collectstatic --noinput &&
 #             python manage.py loaddata shop/fixtures/initial_data.json || true &&
 #             gunicorn rztk_project.wsgi:application --bind 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
     environment:
       - DB_HOST=db
       - DB_NAME=rztk_db
@@ -50,6 +52,7 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_USER=rztk_user
       - RABBITMQ_PASSWORD=12345
+      - ALLOWED_HOSTS=localhost,127.0.0.1,web,rztk.store,www.rztk.store
     depends_on:
       db:
         condition: service_healthy
@@ -91,7 +94,7 @@ services:
   nginx:
     image: nginx:1.25
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/app/staticfiles

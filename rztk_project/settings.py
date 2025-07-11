@@ -9,7 +9,7 @@ env.read_env(BASE_DIR / '.env')
 # Основные настройки
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-xxu(cqz#-ie*ng-omy2y)q+tx))$mwidx(b8jlub=bo!(l%qq7')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', 'web'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', 'web', 'rztk.store', 'www.rztk.store'])
 
 # Приложения
 INSTALLED_APPS = [
