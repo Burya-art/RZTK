@@ -31,6 +31,18 @@ services:
       timeout: 3s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - rztk_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   web:
     build:
       context: .
@@ -52,11 +64,17 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_USER=rztk_user
       - RABBITMQ_PASSWORD=12345
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=1
       - ALLOWED_HOSTS=localhost,127.0.0.1,web,rztk.store,www.rztk.store
+      - CSRF_TRUSTED_ORIGINS=https://rztk.store,https://www.rztk.store
     depends_on:
       db:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - .:/app

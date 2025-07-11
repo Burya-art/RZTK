@@ -29,3 +29,6 @@ staticfiles/
 .idea/.coverage
 .coverage
 htmlcov/
+
+# Deployment files with sensitive information
+DEPLOY_INSTRUCTIONS.md
