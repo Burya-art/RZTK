@@ -1,5 +1,8 @@
+from re import search
+
 from django.db import models
 from django.urls import reverse
+from django.contrib.postgres.search import SearchVector
 
 
 class Brand(models.Model):
@@ -64,3 +67,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:product_detail',
                        args=[self.category.slug, self.slug])
+
+    @classmethod
+    def search(cls, query):
+        """Повнотекстовий пошук товарів"""
+        return cls.objects.annotate(
+            search=SearchVector('name', 'description', 'brand__name')
+        ).filter(search=query)

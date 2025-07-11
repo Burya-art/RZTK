@@ -1,9 +1,12 @@
 from typing import List, Optional
+from zoneinfo import available_timezones
+
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from .models import Product, Category, Brand
+from django.contrib.postgres.search import SearchQuery
 
 
 class ProductService:
@@ -23,9 +26,7 @@ class ProductService:
         
         # Фільтр за текстом: шукаємо в назві та описі товару
         if search_query:
-            products = products.filter(
-                Q(name__icontains=search_query) | Q(description__icontains=search_query)
-            )
+            products = Product.search(search_query).filter(available=True)
         
         # Фільтр за категорією
         if category_slug:
