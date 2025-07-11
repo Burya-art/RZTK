@@ -33,3 +33,22 @@ class TestProductModels:
         assert product.brand == brand
         assert product in category.products.all()
         assert product in brand.products.all()
+    
+    def test_product_availability_toggle(self, product):
+        """Тест зміни доступності продукту"""
+        # Перевіряємо початковий стан
+        assert product.available is True
+        
+        # Змінюємо доступність на False
+        product.available = False
+        product.save()
+        
+        # Перевіряємо, що зміни збережені
+        product.refresh_from_db()
+        assert product.available is False
+        
+        # Повертаємо доступність
+        product.available = True
+        product.save()
+        product.refresh_from_db()
+        assert product.available is True

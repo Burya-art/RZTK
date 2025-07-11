@@ -25,8 +25,8 @@ class UserRegisterForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if len(username) > 20:  #777
-            raise ValidationError('Ім\'я користувача не може перевищувати 20 символів.')  #777
+        if len(username) > 20:
+            raise ValidationError('Ім\'я користувача не може перевищувати 20 символів.')
         if not re.match(r'^[\w.@+-]+$', username):
             raise ValidationError('Ім\'я користувача може містити лише літери, цифри та символи @/./+/-/_ .')
         if User.objects.filter(username=username).exists():

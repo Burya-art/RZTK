@@ -5,9 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from orders.models import Order
-from allauth.socialaccount.models import SocialAccount
-from django.conf import settings
-import pprint
 
 
 def register(request):
@@ -68,29 +65,3 @@ def cancel_order(request, order_id):
     return redirect('account:profile')
 
 
-@login_required
-def debug_oauth(request):
-    """Debug view to show Google OAuth data and profile information"""
-    social_accounts = SocialAccount.objects.filter(user=request.user)
-    
-    # Get Google OAuth settings
-    google_settings = getattr(settings, 'SOCIALACCOUNT_PROVIDERS', {}).get('google', {})
-    google_scopes = google_settings.get('SCOPE', [])
-    
-    # Template filter to pretty print JSON
-    def pprint_filter(value):
-        return pprint.pformat(value, width=80, depth=3)
-    
-    # Add pprint filter to template context
-    context = {
-        'social_accounts': social_accounts,
-        'socialaccount_adapter': getattr(settings, 'SOCIALACCOUNT_ADAPTER', 'Default'),
-        'site_id': getattr(settings, 'SITE_ID', 'Not Set'),
-        'google_scopes': google_scopes,
-    }
-    
-    # Add pretty printed extra_data for each account
-    for account in social_accounts:
-        account.extra_data_pretty = pprint_filter(account.extra_data)
-    
-    return render(request, 'account/debug_oauth.html', context)

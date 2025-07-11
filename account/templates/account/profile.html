@@ -21,9 +21,19 @@
             {% endif %}
         </div>
         <div class="col-md-9">
-            <h2>Ласкаво просимо, {{ user.username }}!</h2>
+            <h2>Ласкаво просимо,
+                {% if user.first_name %}
+                    {{ user.first_name }} {{ user.last_name }}!
+                {% else %}
+                    {{ user.username }}!
+                {% endif %}
+            </h2>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Дата реєстрації:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+            {% if user.first_name or user.last_name %}
+                <p><strong>Ім'я:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+            {% endif %}
+            <p><strong>Username:</strong> {{ user.username }}</p>
         </div>
     </div>
 </div>
@@ -69,9 +79,6 @@
 
         <div class="d-flex gap-3 mt-4 justify-content-start">
             <a href="{% url 'products:product_list' %}" class="btn btn-primary">До покупок</a>
-            {% if user.is_staff %}
-                <a href="{% url 'account:debug_oauth' %}" class="btn btn-info">Debug OAuth</a>
-            {% endif %}
             <form method="POST" action="{% url 'account:logout' %}" class="d-inline-block">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger">Вийти</button>
