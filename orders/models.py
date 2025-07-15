@@ -47,3 +47,41 @@ class OrderItem(models.Model):
 
     def get_total_price(self):
         return self.quantity * self.price
+
+class Payment(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+    transaction_id = models.CharField(max_length=100, blank=True, null=True) # ID від LiqPay
+    liqpay_order_id = models.CharField(max_length=100, unique=True) # Наш ID для LiqPay
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='UAH')
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Очікує'),
+        ('success', 'Успішно'),
+        ('failure', 'Помилка'),
+        ('sandbox', 'Тестовий')
+    ], default='pending')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'payments'
+        verbose_name = 'Платіж'
+        verbose_name_plural = 'Платежі'
+        ordering = ['-created']
+
+    def __str__(self):
+        return f'Платіж {self.liqpay_order_id} - {self.amount} {self.currency}'
+
+
+
+
+
+
+
+
+
+
+
+
+
+

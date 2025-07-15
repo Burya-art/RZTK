@@ -35,15 +35,12 @@ class GoogleSocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def pre_social_login(self, request, sociallogin):
         """Викликається перед обробкою соціального входу"""
-        # Для існуючих користувачів потрібно оновити профіль тут
-        # оскільки save_user викликається тільки для нових користувачів
-        if sociallogin.account.provider == 'google':
-            # Перевіряємо чи це існуючий користувач (має pk)
-            if sociallogin.account.pk:
-                self.populate_user_profile_from_google(sociallogin.account.user, sociallogin)
-
-        # Викликаємо батьківський метод
-        return super().pre_social_login(request, sociallogin)
+        # Викликаємо батьківський метод спочатку
+        super().pre_social_login(request, sociallogin)
+        
+        # Для існуючих користувачів оновлюємо профіль
+        if sociallogin.account.provider == 'google' and sociallogin.user:
+            self.populate_user_profile_from_google(sociallogin.user, sociallogin)
 
     def populate_user(self, request, sociallogin, data):
         """Викликається для заповнення даних користувача з соціального входу"""

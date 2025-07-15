@@ -235,6 +235,10 @@ SOCIALACCOUNT_ADAPTER = 'account.adapters.GoogleSocialAccountAdapter'  # під�
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': env('GOOGLE_OAUTH2_CLIENT_ID', default=''),
+            'secret': env('GOOGLE_OAUTH2_CLIENT_SECRET', default=''),
+        },
         'SCOPE': [  # запитує дозвіл на профіль, email і фото
             'profile',
             'email',

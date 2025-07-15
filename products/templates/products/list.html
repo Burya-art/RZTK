@@ -38,19 +38,43 @@
         <ul class="pagination justify-content-center mt-4">
             {% if products.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ products.previous_page_number }}">Попередня</a>
+    <a class="page-link" href="?page={{ products.previous_page_number }}
+        {% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}
+        {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
+        {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+        {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+        {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        Попередня
+    </a>
                 </li>
             {% endif %}
 
             {% for num in products.paginator.page_range %}
                 <li class="page-item {% if products.number == num %}active{% endif %}">
-                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        <a class="page-link" href="?page={{ num }}
+        {% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}
+        {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
+        {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+        {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+        {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        {{ num }}
+                        </a>
                 </li>
             {% endfor %}
 
             {% if products.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ products.next_page_number }}">Наступна</a>
+    <a class="page-link" href="?page={{ products.next_page_number}}
+        {% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}
+        {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
+        {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+        {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+        {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        Наступна
+    </a>
                 </li>
             {% endif %}
         </ul>
