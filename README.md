@@ -1,6 +1,6 @@
 # RZTK - Django E-commerce Platform
 
-🛍️ Інтернет-магазин електроніки розроблений на Django для продажу смартфонів та аксесуарів.
+🛍️ Інтернет-магазин електроніки розроблений на Django.
 
 **Сайт:** https://rztk.store
 
@@ -21,28 +21,6 @@
 - **Queue:** Celery 5.4.0 + RabbitMQ 3
 - **Deploy:** Docker + Docker Compose
 - **Testing:** pytest
-
-## 📋 Швидкий старт
-
-### Локальна розробка
-# Запуск через Docker
-docker-compose up -d
-
-# Міграції
-docker-compose run --rm web python manage.py migrate
-
-# Створення суперкористувача
-docker-compose run --rm web python manage.py createsuperuser
-
-# Сайт доступний на: http://localhost:8000
-
-
-### Тестування
-# Всі тести
-docker-compose run --rm test
-
-# Конкретний додаток
-docker-compose run --rm test pytest products/tests/ -v
 
 
 ## 🏗️ Архітектура
