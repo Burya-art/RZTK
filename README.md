@@ -25,11 +25,6 @@
 ## 📋 Швидкий старт
 
 ### Локальна розробка
-```bash
-# Клонування проекту
-git clone <repository-url>
-cd RZTK
-
 # Запуск через Docker
 docker-compose up -d
 
@@ -40,16 +35,15 @@ docker-compose run --rm web python manage.py migrate
 docker-compose run --rm web python manage.py createsuperuser
 
 # Сайт доступний на: http://localhost:8000
-```
+
 
 ### Тестування
-```bash
 # Всі тести
 docker-compose run --rm test
 
 # Конкретний додаток
 docker-compose run --rm test pytest products/tests/ -v
-```
+
 
 ## 🏗️ Архітектура
 
@@ -83,23 +77,6 @@ RZTK/
 └── requirements.txt
 ```
 
-## 🔧 Розробка
-
-### Основні команди
-```bash
-# Логи
-docker-compose logs -f web
-
-# Django shell
-docker-compose run --rm web python manage.py shell
-
-# Збір статики
-docker-compose run --rm web python manage.py collectstatic
-
-# Нові міграції
-docker-compose run --rm web python manage.py makemigrations
-```
-
 ### API Endpoints
 - `/api/` - Products API
 - `/api/account/` - User API
@@ -114,14 +91,10 @@ docker-compose run --rm web python manage.py makemigrations
 4. **Застосування міграцій**
 5. **Запуск сервісів**
 
-Детальні інструкції: `DEPLOY_INSTRUCTIONS.md`
+Детальні інструкції як деплоїти: `DEPLOY_INSTRUCTIONS.md`
 
 ## 📧 Контакти
 
 - **Автор:** Ihor Burchik
-- **Email:** [твій email]
+- **Email:** burchik35@gmail.com
 - **Сайт:** https://rztk.store
-
----
-
-*Розроблено з ❤️ для інтернет-торгівлі*
