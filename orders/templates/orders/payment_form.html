@@ -1,0 +1,71 @@
+{% extends "shop/base.html" %}
+
+{% block title %}
+    Оплата замовлення #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+    <h2>Оплата замовлення #{{ order.id }}</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Деталі замовлення</h3>
+            <p><strong>Дата:</strong> {{ order.created|date:"d.m.Y H:i" }}</p>
+            <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+            <p><strong>Адреса доставки:</strong> {{ order.address }}</p>
+
+            <h4>Товари у замовленні</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Кількість</th>
+                        <th>Ціна</th>
+                        <th>Сума</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price }} грн</td>
+                            <td>{{ item.get_total_price }} грн</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p><strong>Загальна сума:</strong> {{ order.get_total_price }} грн</p>
+        </div>
+
+        <div class="col-md-6">
+            <h3>Оплата</h3>
+            <div class="alert alert-info">
+                <strong>Сума до оплати:</strong> {{ payment.amount }} {{ payment.currency }}
+            </div>
+
+            {% if payment.status == 'success' %}
+                <div class="alert alert-success">
+                    <strong>Оплата завершена!</strong> Ваше замовлення успішно оплачено.
+                </div>
+                <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-primary">Переглянути замовлення</a>
+            {% else %}
+                <div class="alert alert-warning">
+                    <strong>Статус платежу:</strong> {{ payment.get_status_display }}
+                </div>
+
+                <p>Для оплати замовлення натисніть кнопку нижче:</p>
+
+                <div class="liqpay-form">
+                    {{ form_data|safe }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-secondary">Повернутись до замовлення</a>
+    </div>
+{% endblock %}
+

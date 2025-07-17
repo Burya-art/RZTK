@@ -153,6 +153,11 @@ RABBITMQ_PASSWORD = env('RABBITMQ_PASSWORD', default='12345')
 # API Новая Почта
 NOVA_POSHTA_API_KEY = env('NOVA_POSHTA_API_KEY', default='')
 
+# LiqPay налаштування
+LIQPAY_PUBLIC_KEY = env('LIQPAY_PUBLIC_KEY', default='sandbox_i14605356113')
+LIQPAY_PRIVATE_KEY = env('LIQPAY_PRIVATE_KEY', default='sandbox_DtTeFQZdPcpwHLR9j0QfGuEcrWdowgPMRnO7ZD4I')
+LIQPAY_SANDBOX = env.bool('LIQPAY_SANDBOX', default=True)
+
 # Логирование
 LOGGING = {
     'version': 1,
@@ -207,7 +212,7 @@ REST_FRAMEWORK = {
 }
 
 # Django Allauth - соціальна аутентифікація
-SITE_ID = 1  # ID сайту в Django sites framework
+SITE_ID = 2  # ID сайту в Django sites framework (localhost:8000)
 
 # Бекенди для аутентифікації (email + соціальний)
 AUTHENTICATION_BACKENDS = [

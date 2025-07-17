@@ -1,0 +1,82 @@
+{% extends "shop/base.html" %}
+
+{% block title %}
+    Оплата завершена - Замовлення #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success text-center">
+                    <h2><i class="fas fa-check-circle"></i> Оплата завершена!</h2>
+                    <p class="lead">Ваше замовлення #{{ order.id }} успішно оплачено.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Деталі платежу</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Номер замовлення:</strong> #{{ order.id }}</p>
+                                <p><strong>Дата замовлення:</strong> {{ order.created|date:"d.m.Y H:i" }}</p>
+                                <p><strong>Статус замовлення:</strong> {{ order.get_status_display }}</p>
+                                <p><strong>Адреса доставки:</strong> {{ order.address }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                {% if payment %}
+                                    <p><strong>Сума платежу:</strong> {{ payment.amount }} {{ payment.currency }}</p>
+                                    <p><strong>Статус платежу:</strong> {{ payment.get_status_display }}</p>
+                                    <p><strong>Дата платежу:</strong> {{ payment.created|date:"d.m.Y H:i" }}</p>
+                                    {% if payment.transaction_id %}
+                                        <p><strong>ID транзакції:</strong> {{ payment.transaction_id }}</p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h4>Товари у замовленні</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Товар</th>
+                                    <th>Кількість</th>
+                                    <th>Ціна за одиницю</th>
+                                    <th>Загальна вартість</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                    <tr>
+                                        <td>{{ item.product.name }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.price }} грн</td>
+                                        <td>{{ item.get_total_price }} грн</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="text-right">
+                            <h5><strong>Загальна сума: {{ order.get_total_price }} грн</strong></h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-primary">Переглянути замовлення</a>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Продовжити покупки</a>
+                    <a href="{% url 'account:profile' %}" class="btn btn-info">Мій профіль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
