@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
-
 from .models import Order, OrderItem, Payment
 from basket.models import Basket
 from django.conf import settings
 from liqpay3.liqpay import LiqPay
 import uuid
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,11 @@ class LiqPayService:
     """
 
     def __init__(self):
+        self.public_key = settings.LIQPAY_PUBLIC_KEY
+        self.private_key = settings.LIQPAY_PRIVATE_KEY
         self.liqpay = LiqPay(
-            public_key=settings.LIQPAY_PUBLIC_KEY,
-            private_key=settings.LIQPAY_PRIVATE_KEY,
+            public_key=self.public_key,
+            private_key=self.private_key,
         )
 
     def create_payment(self, order: Order, success_url, server_url):
@@ -84,7 +86,22 @@ class LiqPayService:
             'language': 'uk'
         }
 
-        form_data = self.liqpay.cnb_form(params)
+        # Використовуємо cnb_form і витягуємо дані
+        full_form = self.liqpay.cnb_form(params)
+
+        # Витягуємо data та signature з HTML форми
+        data_match = re.search(r'name="data" value="([^"]+)"', full_form)
+        signature_match = re.search(r'name="signature" value="([^"]+)"', full_form)
+
+        data_encoded = data_match.group(1) if data_match else None
+        signature = signature_match.group(1) if signature_match else None
+
+        # Повертаємо дані для кастомної форми
+        form_data = {
+            'data': data_encoded,
+            'signature': signature,
+            'action_url': 'https://www.liqpay.ua/api/3/checkout'
+        }
         logger.info(f"Згенеровано форму для платежу {payment.liqpay_order_id}")
         return form_data
 
@@ -141,20 +158,4 @@ class LiqPayService:
 
         except Exception as e:
             logger.error(f"Помилка при обробці callback: {str(e)}")
-            return{'status': 'error', 'message': str(e)}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return {'status': 'error', 'message': str(e)}

@@ -58,7 +58,13 @@
                 <p>Для оплати замовлення натисніть кнопку нижче:</p>
 
                 <div class="liqpay-form">
-                    {{ form_data|safe }}
+                    <form action="{{ form_data.action_url }}" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="data" value="{{ form_data.data }}">
+                        <input type="hidden" name="signature" value="{{ form_data.signature }}">
+                          <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+                              <img src="https://static.liqpay.ua/buttons/payUk.png" alt="LiqPay" style="height: 50px;">
+                            </button>
+                    </form>
                 </div>
             {% endif %}
         </div>
