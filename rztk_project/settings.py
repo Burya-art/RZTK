@@ -119,6 +119,10 @@ STATICFILES_DIRS = [BASE_DIR / 'static/']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/app/media'
 
+# MIME types для зображень
+import mimetypes
+mimetypes.add_type('image/webp', '.webp')
+
 # Автоинкремент
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -212,7 +216,7 @@ REST_FRAMEWORK = {
 }
 
 # Django Allauth - соціальна аутентифікація
-SITE_ID = 2  # ID сайту в Django sites framework (localhost:8000)
+SITE_ID = 1  # ID сайту в Django sites framework
 
 # Бекенди для аутентифікації (email + соціальний)
 AUTHENTICATION_BACKENDS = [
