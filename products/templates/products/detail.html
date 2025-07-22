@@ -15,6 +15,15 @@
         <h2>{{ product.name }}</h2>
         <p class="text-muted">{{ product.price }} грн.</p>
         <p>{{ product.description }}</p>
+        <!-- Теги товару -->
+        {% if product.tags.exists %}
+          <div class="mb-3">
+              <strong>Теги:</strong>
+              {% for tag in product.tags.all %}
+                  <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}" class="badge me-1 text-decoration-none" style="background-color: {{ tag.color }}; color: white;">{{ tag.name }}</a>
+              {% endfor %}
+          </div>
+        {% endif %}
         {% if product.available %}
             <span class="badge bg-success">В наявності</span>
             {% if user.is_authenticated %}

@@ -34,6 +34,7 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('reviews/', include('reviews.urls')),
     path('nova-poshta/', include('nova_poshta.urls')),
+    path('products/', include('products.urls')),
     path('', include('products.urls')),
 ]
 

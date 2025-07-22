@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from .models import Category, Brand, Product
+from .models import Category, Brand, Product, Tag
 from .services import ProductService
 from reviews.services import ReviewService
 from reviews.models import Review
@@ -15,6 +15,7 @@ def product_list(request, category_slug=None):
     brand = None
     categories = Category.objects.all()  # Всі категорії для сайдбару
     brands = Brand.objects.all()         # Всі бренди для сайдбару
+    tags = Tag.objects.all()             # Всі теги для сайдбару
     search_query = request.GET.get('q')  # Пошуковий запит з форми
 
     # Отримуємо персональні рекомендації на основі переглядів користувача
@@ -32,18 +33,19 @@ def product_list(request, category_slug=None):
 
     # Застосовуємо всі фільтри та отримуємо відфільтровані продукти
     products = ProductService.get_filtered_products(
-        category_slug=category_slug or request.GET.get('category'),  # Категорія з URL або GET
+        category_slug=category_slug or (request.GET.get('category') if not request.GET.get('tag') else None),  # Категорія з URL або GET
         brand_slug=request.GET.get('brand'),    # Бренд з GET параметрів
         search_query=search_query,              # Текст пошуку
         price_min=price_min,                    # Мінімальна ціна
         price_max=price_max,                    # Максимальна ціна
-        sort_by=request.GET.get('sort')         # Сортування (ціна вгору/вниз)
+        sort_by=request.GET.get('sort'),        # Сортування (ціна вгору/вниз)
+        tag_slug = request.GET.get('tag')       # Фільтр по тегу
     )
 
     # Визначаємо активну категорію та бренд для підсвічування в інтерфейсі
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-    elif request.GET.get('category'):
+    elif request.GET.get('category') and not request.GET.get('tag'):
         category = get_object_or_404(Category, slug=request.GET.get('category'))
 
     if request.GET.get('brand'):
@@ -67,6 +69,7 @@ def product_list(request, category_slug=None):
             'categories': categories,
             'brand': brand,
             'brands': brands,
+            'tags': tags,
             'products': products,
             'search_query': search_query,
             'recommended_products': recommended_products,

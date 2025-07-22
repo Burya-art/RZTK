@@ -2,13 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from products.api_views import ProductViewSet, CategoryViewSet, BrandViewSet
+from products.api_views import ProductViewSet, CategoryViewSet, BrandViewSet, TagViewSet
 
 # Створюємо роутер який автоматично генерує URL patterns
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'brands', BrandViewSet)
+router.register(r'tags', TagViewSet)
 
 
 @api_view(['GET'])
@@ -21,6 +22,7 @@ def api_root(request):
             'categories': request.build_absolute_uri('/api/categories/'),
             'brands': request.build_absolute_uri('/api/brands/'),
             'user': request.build_absolute_uri('/api/account/user/'),
+            'tags': request.build_absolute_uri('/api/tags/'),
         }
     })
 

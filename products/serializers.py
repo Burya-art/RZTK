@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from products.models import Product, Category, Brand
+from products.models import Product, Category, Brand, Tag
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -18,17 +18,26 @@ class BrandSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug']
 
 
+class TagSerializer(serializers.ModelSerializer):
+    """Серіалізатор для тегів"""
+    
+    class Meta:
+        model = Tag
+        fields = ['id', 'name', 'slug', 'color']
+
+
 class ProductSerializer(serializers.ModelSerializer):
-    """Серіалізатор для товарів з вкладеними категоріями і брендами"""
+    """Серіалізатор для товарів з вкладеними категоріями, брендами та тегами"""
     category = CategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
     
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'slug', 'description', 'price', 
             'available', 'created', 'updated', 'image',
-            'category', 'brand'
+            'category', 'brand', 'tags'
         ]
 
 

@@ -26,6 +26,14 @@
                 <h5 class="mt-2">{{ product.name }}</h5>
             </a>
             <p class="text-muted">{{ product.price }} грн</p>
+            <!-- Теги товару -->
+            {% if product.tags.exists %}
+                <div class="mb-2">
+                    {% for tag in product.tags.all %}
+                        <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}" class="badge badge-sm me-1 text-decoration-none" style="background-color: {{ tag.color }}; color: white; font-size: 0.7rem;">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     {% empty %}

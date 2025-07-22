@@ -1,11 +1,12 @@
 from rest_framework import viewsets, filters
 
-from products.models import Product, Category, Brand
+from products.models import Product, Category, Brand, Tag
 from products.serializers import (
     ProductSerializer, 
     ProductListSerializer,
     CategorySerializer,
-    BrandSerializer
+    BrandSerializer,
+    TagSerializer,
 )
 
 
@@ -23,6 +24,13 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
 
 
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    """API для тегів товарів"""
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    lookup_field = 'slug'
+
+
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     """API для товарів з пошуком і сортуванням"""
     queryset = Product.objects.select_related('category', 'brand').filter(available=True)
@@ -34,3 +42,13 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['price', 'created', 'name']
     ordering = ['-created']
+
+
+
+
+
+
+
+
+
+

@@ -22,6 +22,22 @@ class Brand(models.Model):
         return reverse('products:product_list') + f'?brand={self.slug}'
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True)
+    color = models.CharField(max_length=7, default="#007bff",
+                             help_text="Hex колір для тегу")
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+        ordering = ['name']
+        db_table = 'tags'
+
+    def __str__(self):
+        return self.name
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -53,6 +69,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d',
                               blank=True, null=True)
+    tags = models.ManyToManyField(Tag, related_name='products', blank=True)
 
     class Meta:
         # ordering = ['name']
