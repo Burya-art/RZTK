@@ -25,14 +25,14 @@
                 <tr>
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.price }} грн</td>
-                    <td>{{ item.get_total_price }} грн</td>
+                    <td>{{ item.price|floatformat:0 }} грн</td>
+                    <td>{{ item.get_total_price|floatformat:0 }} грн</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <p><strong>Загальна сума:</strong> {{ order.get_total_price }} грн</p>
+    <p><strong>Загальна сума:</strong> {{ order.get_total_price|floatformat:0 }} грн</p>
 
     <a href="{% url 'account:profile' %}" class="btn btn-primary">Назад до профілю</a>
 {% endblock %}

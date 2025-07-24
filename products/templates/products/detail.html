@@ -13,7 +13,15 @@
     </div>
     <div class="col-md-6">
         <h2>{{ product.name }}</h2>
-        <p class="text-muted">{{ product.price }} грн.</p>
+        {% if product.is_on_sale and product.original_price %}
+            <p class="text-muted">
+                <span class="text-decoration-line-through text-secondary fs-5">{{ product.original_price|floatformat:0 }} грн.</span><br>
+                <span class="text-danger fw-bold fs-4">{{ product.price|floatformat:0 }} грн.</span>
+                <span class="badge bg-success ms-2">-{{ product.discount_percentage }}%</span>
+            </p>
+        {% else %}
+            <p class="text-muted fs-4">{{ product.price|floatformat:0 }} грн.</p>
+        {% endif %}
         <p>{{ product.description }}</p>
         <!-- Теги товару -->
         {% if product.tags.exists %}

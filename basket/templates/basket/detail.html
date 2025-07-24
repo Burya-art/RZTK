@@ -27,8 +27,8 @@
                             <button type="submit" class="btn btn-sm btn-primary ms-2">Оновити</button>
                         </form>
                     </td>
-                    <td>{{ item.product.price }} грн</td>
-                    <td>{{ item.get_total_price }} грн</td>
+                    <td>{{ item.product.price|floatformat:0 }} грн</td>
+                    <td>{{ item.get_total_price|floatformat:0 }} грн</td>
                     <td>
                         <form action="{% url 'basket:remove_from_basket' item.id %}" method="post" class="remove-item-form">
                             {% csrf_token %}
@@ -39,7 +39,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <p><strong>Разом:</strong> {{ total_price }} грн</p>
+    <p><strong>Разом:</strong> {{ total_price|floatformat:0 }} грн</p>
     <!-- Форма для оформлення замовлення -->
     <h3>Оформити замовлення</h3>
     <form action="{% url 'orders:create_order' %}" method="post">

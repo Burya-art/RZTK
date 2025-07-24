@@ -25,12 +25,20 @@
                 {% endif %}
                 <h5 class="mt-2">{{ product.name }}</h5>
             </a>
-            <p class="text-muted">{{ product.price }} грн</p>
+            {% if product.is_on_sale and product.original_price %}
+                <p class="text-muted">
+                    <span class="text-decoration-line-through text-secondary">{{ product.original_price|floatformat:0 }} грн</span>
+                    <span class="text-danger fw-bold">{{ product.price|floatformat:0 }} грн</span>
+                    <span class="badge bg-success">-{{ product.discount_percentage }}%</span>
+                </p>
+            {% else %}
+                <p class="text-muted">{{ product.price|floatformat:0 }} грн</p>
+            {% endif %}
             <!-- Теги товару -->
             {% if product.tags.exists %}
                 <div class="mb-2">
                     {% for tag in product.tags.all %}
-                        <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}" class="badge badge-sm me-1 text-decoration-none" style="background-color: {{ tag.color }}; color: white; font-size: 0.7rem;">{{ tag.name }}</a>
+                        <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}{% if category %}&category={{ category.slug }}{% endif %}{% if brand %}&brand={{ brand.slug }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="badge badge-sm me-1 text-decoration-none" style="background-color: {{ tag.color }}; color: white; font-size: 0.7rem;">{{ tag.name }}</a>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -52,7 +60,8 @@
         {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
         {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
         {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
-        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}
+        {% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">
         Попередня
     </a>
                 </li>
@@ -66,7 +75,8 @@
         {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
         {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
         {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
-        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}
+        {% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">
         {{ num }}
                         </a>
                 </li>
@@ -80,7 +90,8 @@
         {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
         {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
         {% if request.GET.category %}&category={{ request.GET.category }}{% endif %}
-        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}">
+        {% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}
+        {% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">
         Наступна
     </a>
                 </li>
@@ -104,7 +115,15 @@
                 {% endif %}
                 <h5 class="mt-2">{{ product.name }}</h5>
             </a>
-            <p class="text-muted">{{ product.price }} грн</p>
+            {% if product.is_on_sale and product.original_price %}
+                <p class="text-muted">
+                    <span class="text-decoration-line-through text-secondary">{{ product.original_price|floatformat:0 }} грн</span>
+                    <span class="text-danger fw-bold">{{ product.price|floatformat:0 }} грн</span>
+                    <span class="badge bg-success">-{{ product.discount_percentage }}%</span>
+                </p>
+            {% else %}
+                <p class="text-muted">{{ product.price|floatformat:0 }} грн</p>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

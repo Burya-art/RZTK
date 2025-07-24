@@ -64,6 +64,12 @@ class Product(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True,
+                                         help_text="Оригінальна ціна (без знижок)")
+    discount_percentage = models.PositiveSmallIntegerField(default=0,
+                                                           help_text="Відсоток знижки (0-100)")
+    is_on_sale = models.BooleanField(default=False,
+                                     help_text="Чи товар у знижці")
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(auto_now=True)
@@ -84,6 +90,20 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:product_detail',
                        args=[self.category.slug, self.slug])
+
+    def save(self, *args, **kwargs):
+        """Автоматично розраховує відсоток знижки при збереженні"""
+        if self.original_price and self.price and self.original_price > self.price:
+            # Розрахунок відсотка знижки: ((стара_ціна - нова_ціна) / стара_ціна) *100
+            discount = ((self.original_price - self.price) / self.original_price) * 100
+            self.discount_percentage = round(discount)
+            self.is_on_sale = True
+        else:
+            self.discount_percentage = 0
+            self.is_on_sale = False
+
+        super().save(*args, **kwargs)
+
 
     @classmethod
     def search(cls, query):

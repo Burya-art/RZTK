@@ -33,7 +33,7 @@ def product_list(request, category_slug=None):
 
     # Застосовуємо всі фільтри та отримуємо відфільтровані продукти
     products = ProductService.get_filtered_products(
-        category_slug=category_slug or (request.GET.get('category') if not request.GET.get('tag') else None),  # Категорія з URL або GET
+        category_slug=category_slug or request.GET.get('category'),  # Категорія з URL або GET - тепер працює разом з тегами
         brand_slug=request.GET.get('brand'),    # Бренд з GET параметрів
         search_query=search_query,              # Текст пошуку
         price_min=price_min,                    # Мінімальна ціна
@@ -45,7 +45,7 @@ def product_list(request, category_slug=None):
     # Визначаємо активну категорію та бренд для підсвічування в інтерфейсі
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-    elif request.GET.get('category') and not request.GET.get('tag'):
+    elif request.GET.get('category'):  # категорія працює разом з тегами
         category = get_object_or_404(Category, slug=request.GET.get('category'))
 
     if request.GET.get('brand'):

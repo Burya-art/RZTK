@@ -72,7 +72,7 @@
                         </li>
                         {% for cat in categories %}
                             <li>
-                                <a href="{% url 'products:product_list' %}?category={{ cat.slug }}{% if brand %}&brand={{ brand.slug }}{% endif %}" {% if category and cat.slug == category.slug %}class="fw-bold"{% endif %}>
+                                <a href="{% url 'products:product_list' %}?category={{ cat.slug }}{% if brand %}&brand={{ brand.slug }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}" {% if category and cat.slug == category.slug %}class="fw-bold"{% endif %}>
                                     {{ cat.name }}
                                 </a>
                             </li>
@@ -84,7 +84,7 @@
                         </li>
                         {% for br in brands %}
                             <li>
-                                <a href="{% url 'products:product_list' %}?brand={{ br.slug }}{% if category %}&category={{ category.slug }}{% endif %}" {% if brand and br.slug == brand.slug %}class="fw-bold"{% endif %}>
+                                <a href="{% url 'products:product_list' %}?brand={{ br.slug }}{% if category %}&category={{ category.slug }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}" {% if brand and br.slug == brand.slug %}class="fw-bold"{% endif %}>
                                     {{ br.name }}
                                 </a>
                             </li>
@@ -92,6 +92,13 @@
                     </ul>
                     <h4>Фільтр за ціною</h4>
                     <form method="GET" action="{% url 'products:product_list' %}" class="price-filter-form">
+                        <!-- Приховані поля для збереження інших фільтрів -->
+                        {% if request.GET.q %}<input type="hidden" name="q" value="{{ request.GET.q }}">{% endif %}
+                        {% if category %}<input type="hidden" name="category" value="{{ category.slug }}">{% endif %}
+                        {% if brand %}<input type="hidden" name="brand" value="{{ brand.slug }}">{% endif %}
+                        {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+                        {% if request.GET.tag %}<input type="hidden" name="tag" value="{{ request.GET.tag }}">{% endif %}
+                        
                         <div class="mb-3">
                             <label for="price_min" class="form-label">Від</label>
                             <input type="number" name="price_min" id="price_min" class="form-control form-control-sm price-input" placeholder="0" value="{{ request.GET.price_min }}">
@@ -113,9 +120,9 @@
                         {% else %}За замовчуванням{% endif %}
                       </button>
                       <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="?sort=default{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">За замовчуванням</a></li>
-                        <li><a class="dropdown-item" href="?sort=price_asc{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Від дешевих до дорогих</a></li>
-                        <li><a class="dropdown-item" href="?sort=price_desc{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Від дорогих до дешевих</a></li>
+                        <li><a class="dropdown-item" href="?sort=default{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}{% if brand %}&brand={{ brand.slug }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">За замовчуванням</a></li>
+                        <li><a class="dropdown-item" href="?sort=price_asc{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}{% if brand %}&brand={{ brand.slug }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">Від дешевих до дорогих</a></li>
+                        <li><a class="dropdown-item" href="?sort=price_desc{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if category %}&category={{ category.slug }}{% endif %}{% if brand %}&brand={{ brand.slug }}{% endif %}{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">Від дорогих до дешевих</a></li>
                       </ul>
                     </div>
                     

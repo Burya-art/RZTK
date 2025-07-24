@@ -58,15 +58,15 @@
                                     <tr>
                                         <td>{{ item.product.name }}</td>
                                         <td>{{ item.quantity }}</td>
-                                        <td>{{ item.price }} грн</td>
-                                        <td>{{ item.get_total_price }} грн</td>
+                                        <td>{{ item.price|floatformat:0 }} грн</td>
+                                        <td>{{ item.get_total_price|floatformat:0 }} грн</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
 
                         <div class="text-right">
-                            <h5><strong>Загальна сума: {{ order.get_total_price }} грн</strong></h5>
+                            <h5><strong>Загальна сума: {{ order.get_total_price|floatformat:0 }} грн</strong></h5>
                         </div>
                     </div>
                 </div>
